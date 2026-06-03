@@ -1,0 +1,38 @@
+---
+import { company } from "../data/site";
+import { getLang, getDict } from "../i18n";
+
+const lang = getLang(Astro);
+const t = getDict(lang);
+const base = lang === "en" ? "" : `/${lang}`;
+const p1 = t.about.p1.replace("{year}", String(company.founded)).replace("{city}", company.address.city);
+---
+
+<section class="bg-ink-900 py-24 sm:py-32">
+  <div class="mx-auto max-w-[1500px] px-5 sm:px-8 lg:px-12">
+    <div class="grid items-center gap-12 lg:grid-cols-2 lg:gap-20">
+      <!-- Image -->
+      <div data-reveal="clip">
+        <div class="aspect-[16/11] overflow-hidden border border-white/8">
+          <img src="/gallery/1.jpeg" alt={company.full} class="h-full w-full object-cover" loading="lazy" />
+        </div>
+      </div>
+
+      <!-- Text -->
+      <div>
+        <p class="eyebrow flex items-center gap-3" data-reveal>
+          <span class="inline-block h-px w-8 bg-gold"></span>
+          {t.about.eyebrow}
+        </p>
+        <h2 class="display-lg mt-5 text-cream" data-reveal style="--reveal-delay:100ms">{t.about.title}</h2>
+        <p class="mt-6 max-w-md text-lg leading-relaxed text-mist" data-reveal style="--reveal-delay:180ms">{p1}</p>
+        <a href={`${base}/about`} class="group mt-8 inline-flex items-center gap-3 text-[0.74rem] tracking-[0.18em] text-gold-bright uppercase" data-reveal style="--reveal-delay:240ms">
+          {t.cta.discoverHouse}
+          <span class="flex h-9 w-9 items-center justify-center border border-gold/40 transition-all duration-500 group-hover:bg-gold group-hover:text-ink">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" class="rtl:-scale-x-100"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </span>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>

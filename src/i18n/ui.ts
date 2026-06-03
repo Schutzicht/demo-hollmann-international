@@ -25,6 +25,8 @@ const en = {
     sourcing: "Start a sourcing request",
     enquireShortlist: "Enquire about your shortlist",
     send: "Send enquiry",
+    allServices: "Discover our service",
+    discoverHouse: "Discover the house",
   },
   hero: {
     eyebrow: "Premium vehicles · Worldwide · Since {year}",
@@ -182,7 +184,7 @@ const en = {
 const de = {
   meta: { tagline: "Die exklusivsten Automobile der Welt", desc: "Ein Haus, spezialisiert auf die seltensten Fahrzeuge der Welt. Beschafft, individualisiert und weltweit geliefert." },
   nav: { collection: "Kollektion", specialities: "Spezialitäten", service: "Service", house: "Haus", contact: "Kontakt" },
-  cta: { enquire: "Anfragen", viewCollection: "Kollektion ansehen", requestVehicle: "Fahrzeug anfragen", startEnquiry: "Anfrage starten", explore: "Entdecken", viewAll: "Alle {n} Fahrzeuge ansehen", backToCollection: "Zurück zur Kollektion", save: "Merken", compare: "Vergleichen", call: "Anrufen", enquireCar: "Dieses Fahrzeug anfragen", sourcing: "Beschaffungsanfrage starten", enquireShortlist: "Merkliste anfragen", send: "Anfrage senden" },
+  cta: { enquire: "Anfragen", viewCollection: "Kollektion ansehen", requestVehicle: "Fahrzeug anfragen", startEnquiry: "Anfrage starten", explore: "Entdecken", viewAll: "Alle {n} Fahrzeuge ansehen", backToCollection: "Zurück zur Kollektion", save: "Merken", compare: "Vergleichen", call: "Anrufen", enquireCar: "Dieses Fahrzeug anfragen", sourcing: "Beschaffungsanfrage starten", enquireShortlist: "Merkliste anfragen", send: "Anfrage senden", allServices: "Unseren Service entdecken", discoverHouse: "Das Haus entdecken" },
   hero: { eyebrow: "Premiumfahrzeuge · Weltweit · Seit {year}", t1: "Die exklusivsten", em: "Automobile", t2: "der Welt.", sub: "Ein Haus, spezialisiert auf die seltensten Fahrzeuge der Welt. Beschafft, individualisiert und bis vor Ihre Tür geliefert, überall auf der Welt." },
   statLabels: ["Gegründet", "Vertretene Marken", "Gesprochene Sprachen", "Belieferte Länder"],
   since: "Seit ",
@@ -285,7 +287,7 @@ const de = {
 const zh = {
   meta: { tagline: "世界上最稀有尊贵的座驾", desc: "专注于世界上最稀有车型的车行。全球寻购、个性化定制并交付。" },
   nav: { collection: "车型", specialities: "专长", service: "服务", house: "关于", contact: "联系" },
-  cta: { enquire: "咨询", viewCollection: "浏览车型", requestVehicle: "求购车辆", startEnquiry: "发起咨询", explore: "了解更多", viewAll: "查看全部 {n} 辆", backToCollection: "返回车型", save: "收藏", compare: "对比", call: "致电", enquireCar: "咨询此车", sourcing: "发起寻购请求", enquireShortlist: "咨询收藏清单", send: "发送咨询" },
+  cta: { enquire: "咨询", viewCollection: "浏览车型", requestVehicle: "求购车辆", startEnquiry: "发起咨询", explore: "了解更多", viewAll: "查看全部 {n} 辆", backToCollection: "返回车型", save: "收藏", compare: "对比", call: "致电", enquireCar: "咨询此车", sourcing: "发起寻购请求", enquireShortlist: "咨询收藏清单", send: "发送咨询", allServices: "了解我们的服务", discoverHouse: "了解车行" },
   hero: { eyebrow: "高端车辆 · 全球 · 自 {year} 年", t1: "世界上最", em: "尊贵", t2: "的座驾。", sub: "我们是一家专注于世界稀有车型的车行。为您寻购、个性化定制，并送达全球任何地方。" },
   statLabels: ["成立年份", "代理品牌", "服务语言", "交付国家"],
   since: "自 ",
@@ -388,7 +390,7 @@ const zh = {
 const ar = {
   meta: { tagline: "أرقى السيارات وأكثرها تفرّداً في العالم", desc: "دار متخصصة في أندر السيارات في العالم. نوفّرها ونخصّصها ونسلّمها إلى أي مكان." },
   nav: { collection: "المجموعة", specialities: "التخصصات", service: "الخدمة", house: "الدار", contact: "اتصال" },
-  cta: { enquire: "استفسار", viewCollection: "تصفّح المجموعة", requestVehicle: "اطلب سيارة", startEnquiry: "ابدأ استفساراً", explore: "اكتشف", viewAll: "عرض كل {n} سيارة", backToCollection: "العودة إلى المجموعة", save: "حفظ", compare: "قارن", call: "اتصال", enquireCar: "استفسر عن هذه السيارة", sourcing: "ابدأ طلب توريد", enquireShortlist: "استفسر عن قائمتك", send: "إرسال الاستفسار" },
+  cta: { enquire: "استفسار", viewCollection: "تصفّح المجموعة", requestVehicle: "اطلب سيارة", startEnquiry: "ابدأ استفساراً", explore: "اكتشف", viewAll: "عرض كل {n} سيارة", backToCollection: "العودة إلى المجموعة", save: "حفظ", compare: "قارن", call: "اتصال", enquireCar: "استفسر عن هذه السيارة", sourcing: "ابدأ طلب توريد", enquireShortlist: "استفسر عن قائمتك", send: "إرسال الاستفسار", allServices: "اكتشف خدماتنا", discoverHouse: "تعرّف على الدار" },
   hero: { eyebrow: "سيارات فاخرة · حول العالم · منذ {year}", t1: "أرقى", em: "السيارات", t2: "في العالم.", sub: "دار متخصصة في أندر السيارات على وجه الأرض. نوفّرها ونخصّصها ونسلّمها إلى بابك في أي مكان في العالم." },
   statLabels: ["تأسست", "علامات ممثَّلة", "لغات نتحدث بها", "دول نسلّم إليها"],
   since: "منذ ",

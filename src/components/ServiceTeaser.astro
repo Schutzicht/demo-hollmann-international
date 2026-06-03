@@ -1,0 +1,41 @@
+---
+import { getLang, getDict } from "../i18n";
+
+const lang = getLang(Astro);
+const t = getDict(lang);
+const base = lang === "en" ? "" : `/${lang}`;
+---
+
+<section class="bg-ink py-24 sm:py-32">
+  <div class="mx-auto max-w-[1500px] px-5 sm:px-8 lg:px-12">
+    <div class="grid gap-12 lg:grid-cols-[0.85fr_1.15fr] lg:gap-20">
+      <!-- Intro -->
+      <div data-reveal>
+        <p class="eyebrow flex items-center gap-3">
+          <span class="inline-block h-px w-8 bg-gold"></span>
+          {t.serviceSec.eyebrow}
+        </p>
+        <h2 class="display-lg mt-5 text-cream">{t.serviceSec.title}</h2>
+        <p class="mt-6 max-w-md text-lg leading-relaxed text-mist">{t.serviceSec.sub}</p>
+        <a href={`${base}/service`} class="group mt-8 inline-flex items-center gap-3 text-[0.74rem] tracking-[0.18em] text-gold-bright uppercase">
+          {t.cta.allServices}
+          <span class="flex h-9 w-9 items-center justify-center border border-gold/40 transition-all duration-500 group-hover:bg-gold group-hover:text-ink">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" class="rtl:-scale-x-100"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </span>
+        </a>
+      </div>
+
+      <!-- Service list -->
+      <div class="grid gap-px overflow-hidden border border-white/8 bg-white/8 sm:grid-cols-2">
+        {
+          t.services.map((s: { title: string }, i: number) => (
+            <a href={`${base}/service`} class="group flex items-center justify-between gap-4 bg-ink p-6 transition-colors duration-500 hover:bg-ink-850" data-reveal style={`--reveal-delay:${(i % 2) * 80}ms`}>
+              <span class="font-display text-lg text-cream transition-colors duration-300 group-hover:text-gold-bright">{s.title}</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="shrink-0 text-gold opacity-0 transition-all duration-300 group-hover:translate-x-1 group-hover:opacity-100 rtl:-scale-x-100"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </a>
+          ))
+        }
+      </div>
+    </div>
+  </div>
+</section>

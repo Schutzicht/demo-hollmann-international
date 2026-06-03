@@ -31,7 +31,7 @@ const images: Record<string, string> = {
         collections.map((c, i) => {
           const cat = (t.categories as any)[c.slug];
           return (
-            <a href={`${base}/#contact`} class="group relative block aspect-[3/2] overflow-hidden border border-white/8" data-reveal style={`--reveal-delay:${(i % 2) * 110}ms`}>
+            <a href={`${base}/collection?cat=${c.slug}`} class="group relative block aspect-[3/2] overflow-hidden border border-white/8" data-reveal style={`--reveal-delay:${(i % 2) * 110}ms`}>
               <img src={images[c.slug]} alt={cat.title} class="card-img absolute inset-0 h-full w-full object-cover object-center" loading="lazy" decoding="async" />
               <div class="absolute inset-0 bg-gradient-to-t from-ink via-ink/55 to-transparent"></div>
               <div class="absolute inset-0 flex flex-col justify-end p-7">

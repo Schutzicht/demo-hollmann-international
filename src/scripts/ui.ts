@@ -51,6 +51,7 @@ const S = parseJSON<any>("i18n-data", {
   cmpLabels: { year: "Year", power: "Power", accel: "0–100 km/h", topSpeed: "Top speed", engine: "Engine", drivetrain: "Drivetrain", transmission: "Transmission", mileage: "Mileage" },
   drivetrain: {},
   values: {},
+  tour: { next: "Next", back: "Back", done: "Done", skip: "Skip", of: "of", steps: [] },
 });
 const tDrive = (v: string) => (S.drivetrain && S.drivetrain[v]) || v;
 const tVal = (v: string) => (S.values && S.values[v]) || v;
@@ -577,6 +578,21 @@ function initFiltering() {
   sort?.addEventListener("change", apply);
   brandSel?.addEventListener("change", apply);
   priceSel?.addEventListener("change", apply);
+
+  // Deep-link from the Specialities cards: /collection?cat=armoured
+  const cat = new URLSearchParams(location.search).get("cat");
+  if (cat) {
+    const btn = document.querySelector<HTMLButtonElement>(`[data-filter="${cat}"]`);
+    if (btn) btn.click();
+    else {
+      activeCat = cat;
+      document.querySelectorAll<HTMLButtonElement>("[data-filter]").forEach((b) => {
+        b.classList.remove("border-gold", "bg-gold", "text-ink");
+        b.classList.add("border-white/12", "text-mist");
+      });
+      apply();
+    }
+  }
 }
 
 // ----------------------------------------------------------------------------
@@ -641,6 +657,113 @@ function initPreloader() {
     sessionStorage.setItem("hl:seen", "1");
   }, 1700);
   window.setTimeout(() => pre.remove(), 2600);
+}
+
+// ----------------------------------------------------------------------------
+// Disclaimer (first visit, once per session)
+// ----------------------------------------------------------------------------
+function showDisclaimer() {
+  const d = document.querySelector("[data-disclaimer]");
+  d?.classList.remove("opacity-0", "pointer-events-none");
+  d?.querySelector("[data-disclaimer-panel]")?.classList.remove("translate-y-4");
+}
+function hideDisclaimer() {
+  const d = document.querySelector("[data-disclaimer]");
+  d?.classList.add("opacity-0", "pointer-events-none");
+  d?.querySelector("[data-disclaimer-panel]")?.classList.add("translate-y-4");
+}
+function initDisclaimer() {
+  const d = document.querySelector("[data-disclaimer]");
+  if (!d) return;
+  if (sessionStorage.getItem("hl:disclaimer")) hideDisclaimer();
+  else showDisclaimer();
+}
+
+// ----------------------------------------------------------------------------
+// Guided tour
+// ----------------------------------------------------------------------------
+const TOUR_TARGETS = [
+  "#collection",
+  "[data-grid] [data-compare]",
+  "[data-grid] [data-fav]",
+  "[data-currency-toggle]",
+  "[data-lang-toggle]",
+  "[data-open-shortlist]",
+];
+let tourSteps: { el: HTMLElement; title: string; body: string }[] = [];
+let tourIdx = 0;
+
+function buildTourSteps() {
+  const steps = (S.tour && S.tour.steps) || [];
+  const out: { el: HTMLElement; title: string; body: string }[] = [];
+  TOUR_TARGETS.forEach((sel, i) => {
+    const el = document.querySelector<HTMLElement>(sel);
+    if (el && steps[i] && el.getClientRects().length) {
+      out.push({ el, title: steps[i].title, body: steps[i].body });
+    }
+  });
+  return out;
+}
+function positionTour() {
+  const step = tourSteps[tourIdx];
+  if (!step) return;
+  const r = step.el.getBoundingClientRect();
+  const pad = 8;
+  const hl = document.querySelector<HTMLElement>("[data-tour-highlight]");
+  const tip = document.querySelector<HTMLElement>("[data-tour-tip]");
+  if (hl) {
+    hl.style.top = `${r.top - pad}px`;
+    hl.style.left = `${r.left - pad}px`;
+    hl.style.width = `${r.width + pad * 2}px`;
+    hl.style.height = `${r.height + pad * 2}px`;
+  }
+  if (tip) {
+    const tipW = tip.offsetWidth || 280;
+    const tipH = tip.offsetHeight || 180;
+    const gap = 14;
+    let top = r.bottom + gap;
+    if (top + tipH > window.innerHeight - 10) top = Math.max(10, r.top - tipH - gap);
+    let left = r.left + r.width / 2 - tipW / 2;
+    left = Math.max(12, Math.min(left, window.innerWidth - tipW - 12));
+    tip.style.top = `${top}px`;
+    tip.style.left = `${left}px`;
+  }
+}
+function showTourStep() {
+  const step = tourSteps[tourIdx];
+  if (!step) {
+    endTour();
+    return;
+  }
+  const set = (sel: string, txt: string) => {
+    const e = document.querySelector(sel);
+    if (e) e.textContent = txt;
+  };
+  set("[data-tour-title]", step.title);
+  set("[data-tour-body]", step.body);
+  set("[data-tour-step]", `${tourIdx + 1} ${S.tour.of} ${tourSteps.length}`);
+  set("[data-tour-skip]", S.tour.skip);
+  set("[data-tour-next]", tourIdx === tourSteps.length - 1 ? S.tour.done : S.tour.next);
+  const back = document.querySelector<HTMLElement>("[data-tour-back]");
+  if (back) {
+    back.textContent = S.tour.back;
+    back.style.visibility = tourIdx === 0 ? "hidden" : "visible";
+  }
+  step.el.scrollIntoView({ block: "center", inline: "center", behavior: "auto" });
+  requestAnimationFrame(() => requestAnimationFrame(positionTour));
+}
+function startTour() {
+  hideDisclaimer();
+  tourSteps = buildTourSteps();
+  if (!tourSteps.length) return;
+  tourIdx = 0;
+  document.querySelector("[data-tour]")?.classList.remove("opacity-0", "pointer-events-none");
+  (window as any).__lenis?.stop();
+  showTourStep();
+}
+function endTour() {
+  document.querySelector("[data-tour]")?.classList.add("opacity-0", "pointer-events-none");
+  (window as any).__lenis?.start();
 }
 
 // ----------------------------------------------------------------------------
@@ -779,6 +902,34 @@ document.addEventListener("click", (e) => {
     document.querySelector("[data-menu]")?.classList.add("translate-x-full");
     document.body.style.overflow = "";
   }
+
+  // Disclaimer
+  if (t.closest("[data-disclaimer-enter]")) {
+    sessionStorage.setItem("hl:disclaimer", "1");
+    hideDisclaimer();
+  }
+  if (t.closest("[data-disclaimer-tour]")) {
+    sessionStorage.setItem("hl:disclaimer", "1");
+    startTour();
+  }
+
+  // Tour controls
+  if (t.closest("[data-start-tour]")) {
+    e.preventDefault();
+    startTour();
+  }
+  if (t.closest("[data-tour-next]")) {
+    tourIdx++;
+    if (tourIdx >= tourSteps.length) endTour();
+    else showTourStep();
+  }
+  if (t.closest("[data-tour-back]")) {
+    if (tourIdx > 0) {
+      tourIdx--;
+      showTourStep();
+    }
+  }
+  if (t.closest("[data-tour-skip]")) endTour();
 });
 
 // Forms (delegated)
@@ -805,6 +956,7 @@ document.addEventListener("keydown", (e) => {
     closeCompare();
     closeEnquiry();
     closeDrawer();
+    endTour();
     document.querySelector("[data-currency-menu]")?.classList.add("hidden");
     document.querySelector("[data-lang-menu]")?.classList.add("hidden");
   }
@@ -824,6 +976,7 @@ function onPageLoad() {
   initMagnetic();
   initCursor();
   initPreloader();
+  initDisclaimer();
   applyCurrency();
   syncStates();
   renderCompareBar();
@@ -834,6 +987,7 @@ initLenisOnce();
 window.addEventListener("scroll", updateHeader, { passive: true });
 window.addEventListener("mousemove", (e) => rotMove(e.clientX));
 window.addEventListener("mouseup", rotUp);
+window.addEventListener("resize", positionTour);
 
 document.addEventListener("astro:page-load", onPageLoad);
 document.addEventListener("astro:after-swap", () => {

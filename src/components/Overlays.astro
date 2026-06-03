@@ -105,3 +105,39 @@ const t = getDict(lang);
   <img data-lightbox-img src="" alt="" class="relative max-h-[86vh] max-w-[90vw] object-contain" />
   <div data-lightbox-counter class="absolute bottom-6 left-1/2 -translate-x-1/2 text-[0.72rem] tracking-[0.2em] text-mist"></div>
 </div>
+
+<!-- ============ Disclaimer (first visit) ============ -->
+<div data-disclaimer class="pointer-events-none fixed inset-0 z-[190] flex items-center justify-center p-4 opacity-0 transition-opacity duration-500">
+  <div class="absolute inset-0 bg-ink/92 backdrop-blur-md"></div>
+  <div data-disclaimer-panel class="relative w-full max-w-lg translate-y-4 border border-gold/25 bg-ink-900 p-8 text-center transition-transform duration-500 sm:p-10" style="transition-timing-function: var(--ease-lux)">
+    <span class="inline-block border border-gold/40 px-3 py-1 text-[0.6rem] tracking-[0.28em] text-gold-bright uppercase">{t.disclaimer.badge}</span>
+    <div class="mt-6 flex flex-col items-center leading-none">
+      <span class="font-display text-3xl tracking-[0.22em] text-cream">HOLLMANN</span>
+      <span class="mt-1 text-[0.55rem] tracking-[0.5em] text-gold">INTERNATIONAL</span>
+    </div>
+    <h2 class="font-display mt-7 text-2xl text-cream sm:text-3xl">{t.disclaimer.title}</h2>
+    <p class="mt-4 text-sm leading-relaxed text-mist">{t.disclaimer.body}</p>
+    <div class="mt-8 flex flex-col gap-3">
+      <button data-disclaimer-tour class="btn btn-gold w-full">{t.disclaimer.tour}</button>
+      <button data-disclaimer-enter class="btn btn-ghost w-full">{t.disclaimer.enter}</button>
+    </div>
+    <p class="mt-6 text-[0.66rem] text-fog">{t.footer.designBy} <a href="https://agensea.nl" target="_blank" rel="noopener" class="text-gold transition-colors hover:text-gold-bright">Agensea</a></p>
+  </div>
+</div>
+
+<!-- ============ Guided tour overlay ============ -->
+<div data-tour class="pointer-events-none fixed inset-0 z-[180] opacity-0 transition-opacity duration-300">
+  <div data-tour-highlight class="pointer-events-none fixed rounded-lg border border-gold transition-all duration-300" style="box-shadow: 0 0 0 9999px rgba(10,10,12,0.8); transition-timing-function: var(--ease-lux)"></div>
+  <div data-tour-tip class="pointer-events-auto fixed w-[280px] border border-white/12 bg-ink-900 p-5 transition-all duration-300" style="transition-timing-function: var(--ease-lux)">
+    <div class="flex items-center justify-between">
+      <span data-tour-step class="text-[0.62rem] tracking-[0.2em] text-gold uppercase"></span>
+      <button data-tour-skip class="text-[0.62rem] tracking-[0.16em] text-fog uppercase transition-colors hover:text-cream"></button>
+    </div>
+    <h3 data-tour-title class="font-display mt-3 text-xl text-cream"></h3>
+    <p data-tour-body class="mt-2 text-sm leading-relaxed text-mist"></p>
+    <div class="mt-5 flex items-center justify-between">
+      <button data-tour-back class="text-[0.7rem] tracking-[0.16em] text-mist uppercase transition-colors hover:text-gold-bright"></button>
+      <button data-tour-next class="btn btn-gold !px-5 !py-2.5 !text-[0.7rem]"></button>
+    </div>
+  </div>
+</div>

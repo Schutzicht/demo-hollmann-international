@@ -1,0 +1,60 @@
+---
+import { company } from "../data/site";
+---
+
+<section id="top" class="relative h-[100svh] min-h-[640px] w-full overflow-hidden grain">
+  <!-- Promo video background (scraped from hollmann.international) -->
+  <video
+    data-hero-video
+    class="absolute inset-0 h-full w-full object-cover"
+    autoplay
+    muted
+    loop
+    playsinline
+    preload="auto"
+    poster="/hero/poster.jpg"
+  >
+    <source src="/hero/hero.mp4" type="video/mp4" />
+  </video>
+
+  <!-- Scrims -->
+  <div class="absolute inset-0 bg-gradient-to-t from-ink via-ink/35 to-ink/55"></div>
+  <div class="absolute inset-0 bg-gradient-to-r from-ink/85 via-ink/20 to-transparent"></div>
+  <div
+    class="absolute inset-0"
+    style="background: radial-gradient(120% 90% at 50% 12%, transparent 40%, rgba(10,10,12,0.55) 100%)"
+  >
+  </div>
+
+  <!-- Content -->
+  <div class="relative z-10 mx-auto flex h-full max-w-[1500px] flex-col justify-end px-5 pb-28 sm:px-8 sm:pb-32 lg:px-12">
+    <div class="max-w-3xl">
+      <p class="eyebrow flex items-center gap-3" data-reveal>
+        <span class="inline-block h-px w-8 bg-gold"></span>
+        Premium vehicles · Worldwide · Since {company.founded}
+      </p>
+      <h1 class="display-xl mt-6 text-cream" data-reveal style="--reveal-delay:120ms">
+        The world's most<br />
+        <span class="gold-text">exclusive</span> automobiles.
+      </h1>
+      <p
+        class="mt-7 max-w-xl text-lg leading-relaxed text-mist"
+        data-reveal
+        style="--reveal-delay:240ms"
+      >
+        A house specialised in the rarest cars on earth. Sourced, individualised
+        and delivered to your door, anywhere in the world.
+      </p>
+      <div class="mt-10 flex flex-wrap items-center gap-4" data-reveal style="--reveal-delay:360ms">
+        <a href="/collection" data-magnetic class="btn btn-gold">View the collection</a>
+        <button data-enquire="" data-magnetic class="btn btn-ghost">Request a vehicle</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scroll cue -->
+  <div class="absolute bottom-8 left-1/2 z-10 hidden -translate-x-1/2 flex-col items-center gap-2 sm:flex">
+    <span class="text-[0.6rem] tracking-[0.3em] text-fog uppercase">Scroll</span>
+    <span class="h-10 w-px bg-gradient-to-b from-gold to-transparent"></span>
+  </div>
+</section>

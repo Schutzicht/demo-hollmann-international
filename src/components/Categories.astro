@@ -1,0 +1,60 @@
+---
+import { collections } from "../data/site";
+
+const images: Record<string, string> = {
+  armoured: "/cars/26G0548/1.jpg",
+  customized: "/cars/26G0847/1.jpg",
+  electric: "/gallery/5.jpeg",
+  oldtimer: "/gallery/9.jpeg",
+};
+---
+
+<section id="categories" class="bg-ink-900 py-24 sm:py-32">
+  <div class="mx-auto max-w-[1500px] px-5 sm:px-8 lg:px-12">
+    <div class="max-w-2xl">
+      <p class="eyebrow flex items-center gap-3" data-reveal>
+        <span class="inline-block h-px w-8 bg-gold"></span>
+        Specialities
+      </p>
+      <h2 class="display-lg mt-5 text-cream" data-reveal style="--reveal-delay:100ms">
+        Four worlds we know intimately.
+      </h2>
+    </div>
+
+    <div class="mt-14 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+      {
+        collections.map((c, i) => (
+          <a
+            href="#contact"
+            class="group relative block aspect-[4/5] overflow-hidden border border-white/8"
+            data-reveal
+            style={`--reveal-delay:${i * 110}ms`}
+          >
+            <img
+              src={images[c.slug]}
+              alt={c.title}
+              class="card-img absolute inset-0 h-full w-full object-cover"
+              loading="lazy"
+              decoding="async"
+            />
+            <div class="absolute inset-0 bg-gradient-to-t from-ink via-ink/45 to-ink/5"></div>
+            <div class="absolute inset-0 flex flex-col justify-end p-7">
+              <h3 class="font-display text-3xl text-cream transition-transform duration-500 group-hover:-translate-y-1">
+                {c.title}
+              </h3>
+              <p class="mt-3 max-h-0 overflow-hidden text-sm leading-relaxed text-mist opacity-0 transition-all duration-500 group-hover:max-h-44 group-hover:opacity-100">
+                {c.desc}
+              </p>
+              <span class="mt-4 flex items-center gap-2 text-[0.66rem] tracking-[0.2em] text-gold-bright uppercase">
+                Explore
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <path d="M5 12h14M13 6l6 6-6 6" />
+                </svg>
+              </span>
+            </div>
+          </a>
+        ))
+      }
+    </div>
+  </div>
+</section>

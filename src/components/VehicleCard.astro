@@ -1,0 +1,125 @@
+---
+import {
+  carImage,
+  fmtEUR,
+  vehicleSlug,
+  vehicleTitle,
+  type Vehicle,
+} from "../data/site";
+
+interface Props {
+  vehicle: Vehicle;
+  index?: number;
+}
+const { vehicle: v, index = 0 } = Astro.props;
+const slug = vehicleSlug(v);
+const title = vehicleTitle(v);
+const powerNum = parseInt(v.power) || 0;
+const search = `${v.brand} ${v.model} ${v.variant ?? ""}`.toLowerCase();
+---
+
+<article
+  class="group relative flex flex-col overflow-hidden border border-white/8 bg-ink-850 transition-all duration-500 hover:border-gold/45"
+  data-card
+  data-cat={v.categories.join(" ")}
+  data-card-brand={v.brand}
+  data-card-price={v.priceNet}
+  data-card-power={powerNum}
+  data-card-search={search}
+  data-reveal
+  style={`--reveal-delay:${(index % 3) * 90}ms`}
+>
+  <!-- Image -->
+  <div class="relative aspect-[3/2] overflow-hidden bg-ink-900">
+    <a href={`/vehicles/${slug}`} aria-label={title}>
+      <img
+        src={carImage(v.id, 1)}
+        alt={title}
+        class="card-img h-full w-full object-cover"
+        loading="lazy"
+        decoding="async"
+        transition:name={`car-${v.id}`}
+      />
+    </a>
+    <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-ink-900/60 via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100"></div>
+
+    <div class="absolute left-4 top-4 flex flex-col gap-2">
+      {
+        v.badge && (
+          <span class="border border-gold/40 bg-ink/70 px-3 py-1.5 text-[0.62rem] tracking-[0.18em] text-gold-bright uppercase backdrop-blur-sm">
+            {v.badge}
+          </span>
+        )
+      }
+      <span class="text-[0.62rem] tracking-[0.18em] text-cream/70 uppercase">{v.year}</span>
+    </div>
+
+    <button
+      data-fav={v.id}
+      aria-label="Save to shortlist"
+      class="absolute right-3 top-3 flex h-9 w-9 items-center justify-center border border-white/15 bg-ink/55 text-cream backdrop-blur-sm transition-all duration-300 hover:border-gold"
+    >
+      <svg width="16" height="16" viewBox="0 0 24 24" stroke-width="1.5">
+        <path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"/>
+      </svg>
+    </button>
+  </div>
+
+  <!-- Body -->
+  <div class="flex flex-1 flex-col p-6">
+    <p class="text-[0.68rem] tracking-[0.24em] text-gold uppercase">{v.brand}</p>
+    <a href={`/vehicles/${slug}`}>
+      <h3 class="font-display mt-1.5 text-2xl leading-tight text-cream transition-colors duration-300 group-hover:text-gold-bright">
+        {v.model}{v.variant && <span class="text-mist"> {v.variant}</span>}
+      </h3>
+    </a>
+
+    <!-- Spec strip -->
+    <div class="mt-5 grid grid-cols-3 gap-2 border-y border-white/8 py-4 text-center">
+      <div>
+        <div class="text-sm text-cream">{v.power}</div>
+        <div class="mt-1 text-[0.58rem] tracking-[0.14em] text-fog uppercase">Power</div>
+      </div>
+      <div class="border-x border-white/8">
+        <div class="text-sm text-cream">{v.accel}</div>
+        <div class="mt-1 text-[0.58rem] tracking-[0.14em] text-fog uppercase">0&ndash;100</div>
+      </div>
+      <div>
+        <div class="text-sm text-cream">{v.topSpeed}</div>
+        <div class="mt-1 text-[0.58rem] tracking-[0.14em] text-fog uppercase">Top</div>
+      </div>
+    </div>
+
+    <!-- Price -->
+    <div class="mt-5 flex items-end justify-between">
+      <div>
+        <div class="font-display text-2xl text-gold-bright" data-price={v.priceNet}>{fmtEUR(v.priceNet)}</div>
+        <div class="mt-0.5 text-[0.64rem] tracking-[0.1em] text-fog">
+          {
+            v.priceGross
+              ? "Net, export"
+              : v.vatNote
+          }
+        </div>
+      </div>
+      <a
+        href={`/vehicles/${slug}`}
+        aria-label={`View ${title}`}
+        class="flex h-10 w-10 items-center justify-center border border-white/15 text-cream transition-all duration-500 group-hover:border-gold group-hover:bg-gold group-hover:text-ink"
+      >
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </a>
+    </div>
+
+    <!-- Actions -->
+    <div class="mt-5 grid grid-cols-2 gap-2">
+      <button data-compare={v.id} class="flex items-center justify-center gap-2 border border-white/12 py-2.5 text-[0.64rem] tracking-[0.14em] text-mist uppercase transition-all duration-300 hover:border-gold/50 hover:text-gold-bright">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 6h7v12H3zM14 6h7v12h-7z"/></svg>
+        Compare
+      </button>
+      <button data-enquire={v.id} class="flex items-center justify-center gap-2 border border-white/12 py-2.5 text-[0.64rem] tracking-[0.14em] text-mist uppercase transition-all duration-300 hover:border-gold/50 hover:text-gold-bright">
+        Enquire
+      </button>
+    </div>
+  </div>
+</article>

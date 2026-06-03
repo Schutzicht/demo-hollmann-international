@@ -1,0 +1,59 @@
+---
+import "../styles/global.css";
+import { ClientRouter } from "astro:transitions";
+import { company, clientVehicles, currencies } from "../data/site";
+import Preloader from "../components/Preloader.astro";
+import Cursor from "../components/Cursor.astro";
+import Overlays from "../components/Overlays.astro";
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = `${company.full} · ${company.tagline}`,
+  description = company.intro,
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta name="theme-color" content="#0a0a0c" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%230a0a0c'/%3E%3Ctext x='16' y='23' font-family='Georgia,serif' font-size='20' fill='%23d1a65c' text-anchor='middle'%3EH%3C/text%3E%3C/svg%3E"
+    />
+    <ClientRouter />
+  </head>
+  <body>
+    <Preloader />
+    <Cursor />
+
+    <slot />
+
+    <Overlays />
+
+    <script type="application/json" id="vehicle-data" is:inline set:html={JSON.stringify(clientVehicles)}></script>
+    <script type="application/json" id="currency-data" is:inline set:html={JSON.stringify(currencies)}></script>
+
+    <script>
+      import "../scripts/ui.ts";
+    </script>
+  </body>
+</html>

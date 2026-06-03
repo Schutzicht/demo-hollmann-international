@@ -1,0 +1,84 @@
+---
+import { company, team, spokenLanguages } from "../data/site";
+---
+
+<section id="about" class="relative overflow-hidden bg-ink-900 py-24 sm:py-32">
+  <div class="mx-auto max-w-[1500px] px-5 sm:px-8 lg:px-12">
+    <div class="grid items-center gap-14 lg:grid-cols-2 lg:gap-20">
+      <!-- Image -->
+      <div class="relative" data-reveal="clip">
+        <div class="aspect-[4/5] overflow-hidden border border-white/8">
+          <img
+            src="/gallery/1.jpeg"
+            alt="The Hollmann International showroom"
+            class="h-full w-full object-cover"
+            loading="lazy"
+          />
+        </div>
+        <div class="absolute -bottom-6 -right-2 hidden border border-gold/30 bg-ink/85 px-7 py-5 backdrop-blur-sm sm:block">
+          <div class="font-display text-4xl text-gold-bright">15+</div>
+          <div class="mt-1 text-[0.66rem] tracking-[0.2em] text-mist uppercase">
+            Years worldwide
+          </div>
+        </div>
+      </div>
+
+      <!-- Text -->
+      <div>
+        <p class="eyebrow flex items-center gap-3" data-reveal>
+          <span class="inline-block h-px w-8 bg-gold"></span>
+          The house
+        </p>
+        <h2 class="display-lg mt-5 text-cream" data-reveal style="--reveal-delay:100ms">
+          A family house for<br />extraordinary cars.
+        </h2>
+        <div class="mt-6 space-y-5 text-lg leading-relaxed text-mist" data-reveal style="--reveal-delay:180ms">
+          <p>
+            Founded in {company.founded} and based in {company.address.city},
+            Hollmann International has specialised in the premium vehicle segment
+            from the very beginning. Our passion reaches clients through the
+            highest standard of service and a deep wealth of know-how.
+          </p>
+          <p>
+            Together with our partner
+            <a href={company.partner.url} class="text-gold-bright underline-offset-4 hover:underline">
+              {company.partner.name}</a>, with more than three decades in the
+            luxury automotive world, we have expanded our procurement channels
+            and global logistics. We work hand in hand with leading international
+            refiners to offer tuning and bespoke conversions.
+          </p>
+        </div>
+
+        <!-- Team -->
+        <div class="mt-10 grid grid-cols-2 gap-6" data-reveal style="--reveal-delay:240ms">
+          {
+            team.map((m) => (
+              <div class="border-l border-gold/30 pl-4">
+                <div class="font-display text-xl text-cream">{m.name}</div>
+                <div class="mt-1 text-[0.7rem] tracking-[0.14em] text-fog uppercase">
+                  {m.role}
+                </div>
+              </div>
+            ))
+          }
+        </div>
+
+        <!-- Languages -->
+        <div class="mt-10 border-t border-white/8 pt-7" data-reveal style="--reveal-delay:300ms">
+          <p class="text-[0.7rem] tracking-[0.22em] text-fog uppercase">
+            Our clients are served in
+          </p>
+          <div class="mt-4 flex flex-wrap gap-x-5 gap-y-2">
+            {
+              spokenLanguages.map((l) => (
+                <span class="text-mist transition-colors duration-300 hover:text-gold-bright">
+                  {l}
+                </span>
+              ))
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

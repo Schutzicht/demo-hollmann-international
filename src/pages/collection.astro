@@ -1,0 +1,100 @@
+---
+import Base from "../layouts/Base.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import VehicleCard from "../components/VehicleCard.astro";
+import { vehicles, categories, company } from "../data/site";
+
+const brands = Array.from(new Set(vehicles.map((v) => v.brand))).sort();
+const priceTiers = [
+  { value: "0", label: "Any price" },
+  { value: "250000", label: "Up to €250k" },
+  { value: "500000", label: "Up to €500k" },
+  { value: "1000000", label: "Up to €1M" },
+  { value: "2000000", label: "Up to €2M" },
+];
+const selectClass =
+  "w-full border border-white/12 bg-ink-850 px-4 py-3 text-sm text-cream outline-none transition-colors duration-300 focus:border-gold";
+---
+
+<Base title={`Collection · ${company.full}`}>
+  <Header />
+  <main class="bg-ink pt-28 sm:pt-32">
+    <div class="mx-auto max-w-[1500px] px-5 sm:px-8 lg:px-12">
+      <!-- Header -->
+      <div class="border-b border-white/8 pb-10">
+        <p class="eyebrow flex items-center gap-3" data-reveal>
+          <span class="inline-block h-px w-8 bg-gold"></span>
+          The collection
+        </p>
+        <div class="mt-5 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+          <h1 class="display-lg text-cream" data-reveal style="--reveal-delay:100ms">
+            Every vehicle, ready to travel.
+          </h1>
+          <p class="text-mist" data-reveal style="--reveal-delay:160ms">
+            Showing <span data-result-count class="text-gold-bright">{vehicles.length}</span> of {vehicles.length} vehicles
+          </p>
+        </div>
+      </div>
+
+      <!-- Controls -->
+      <div class="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-4" data-reveal>
+        <label class="relative block">
+          <svg class="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-fog" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+          <input data-search type="search" placeholder="Search make or model" class={selectClass + " pl-11"} />
+        </label>
+        <select data-brand class={selectClass} aria-label="Filter by brand">
+          <option value="all">All marques</option>
+          {brands.map((b) => <option value={b}>{b}</option>)}
+        </select>
+        <select data-pricemax class={selectClass} aria-label="Filter by price">
+          {priceTiers.map((t) => <option value={t.value}>{t.label}</option>)}
+        </select>
+        <select data-sort class={selectClass} aria-label="Sort">
+          <option value="default">Sort: featured</option>
+          <option value="price-asc">Price: low to high</option>
+          <option value="price-desc">Price: high to low</option>
+          <option value="power-desc">Power: high to low</option>
+        </select>
+      </div>
+
+      <!-- Category chips -->
+      <div class="mt-4 flex flex-wrap gap-2" data-reveal>
+        {
+          categories.map((c, i) => (
+            <button
+              data-filter={c.slug}
+              class:list={[
+                "border px-5 py-2.5 text-[0.7rem] tracking-[0.16em] uppercase transition-all duration-300",
+                i === 0
+                  ? "border-gold bg-gold text-ink"
+                  : "border-white/12 text-mist hover:border-gold/50 hover:text-gold-bright",
+              ]}
+            >
+              {c.label}
+            </button>
+          ))
+        }
+      </div>
+
+      <!-- Grid -->
+      <div data-grid class="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {vehicles.map((v, i) => <VehicleCard vehicle={v} index={i} />)}
+      </div>
+
+      <p data-empty class="mt-16 hidden text-center text-mist">
+        No vehicles match these filters. Tell us what you are looking for and we
+        will source it.
+      </p>
+
+      <div class="mt-16 border-t border-white/8 py-12 text-center">
+        <p class="text-mist">Cannot find it here?</p>
+        <h2 class="display-md mt-3 text-cream">We source worldwide on request.</h2>
+        <button data-enquire="" class="btn btn-gold mt-7">Start a sourcing request</button>
+      </div>
+    </div>
+
+    <div class="h-12"></div>
+  </main>
+  <Footer />
+</Base>

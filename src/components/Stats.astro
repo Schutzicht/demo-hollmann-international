@@ -1,0 +1,36 @@
+---
+import { stats } from "../data/site";
+---
+
+<section class="border-b border-white/5 bg-ink py-16 sm:py-20">
+  <div class="mx-auto grid max-w-[1500px] grid-cols-2 gap-y-10 px-5 sm:px-8 lg:grid-cols-4 lg:px-12">
+    {
+      stats.map((s, i) => {
+        const isYear = s.value > 1000;
+        return (
+          <div
+            class:list={[
+              "flex flex-col px-2 lg:px-8",
+              i !== 0 && "lg:border-l lg:border-white/8",
+            ]}
+            data-reveal
+            style={`--reveal-delay:${i * 90}ms`}
+          >
+            <div class="font-display text-5xl text-cream sm:text-6xl">
+              {s.prefix}
+              {isYear ? (
+                <span>{s.value}</span>
+              ) : (
+                <span data-count={s.value}>0</span>
+              )}
+              <span class="text-gold">{s.suffix}</span>
+            </div>
+            <div class="mt-3 text-[0.72rem] tracking-[0.22em] text-fog uppercase">
+              {s.label}
+            </div>
+          </div>
+        );
+      })
+    }
+  </div>
+</section>

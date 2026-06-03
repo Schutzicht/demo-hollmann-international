@@ -358,3 +358,32 @@ body {
     animation: none !important;
   }
 }
+
+/* ---- Locale fonts ---- */
+:lang(zh) {
+  --font-display: "Noto Sans SC", "Cormorant Garamond", serif;
+  --font-sans: "Noto Sans SC", "Inter", sans-serif;
+}
+:lang(ar) {
+  --font-display: "Noto Kufi Arabic", "Cormorant Garamond", serif;
+  --font-sans: "Noto Sans Arabic", "Inter", sans-serif;
+}
+
+/* ---- RTL ---- */
+/* Letter-spacing breaks Arabic cursive joining, so neutralise it under RTL. */
+[dir="rtl"] [class*="tracking-"],
+[dir="rtl"] .eyebrow,
+[dir="rtl"] .display-xl,
+[dir="rtl"] .display-lg,
+[dir="rtl"] .display-md,
+[dir="rtl"] .font-display {
+  letter-spacing: 0 !important;
+}
+/* Chinese display headings read better a touch tighter than the Latin serif clamp. */
+:lang(zh) .display-xl,
+:lang(zh) .display-lg {
+  line-height: 1.15;
+}
+[dir="rtl"] .btn {
+  letter-spacing: 0;
+}

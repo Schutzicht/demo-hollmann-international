@@ -1,11 +1,26 @@
 ---
-import { nav, company, currencies } from "../data/site";
+import { company, currencies } from "../data/site";
+import { getLang, getDict, languages, localeList, localizePath } from "../i18n";
+
+const lang = getLang(Astro);
+const t = getDict(lang);
+const base = lang === "en" ? "" : `/${lang}`;
+const homeHref = base || "/";
+const pathname = Astro.url.pathname;
+
+const navItems = [
+  { key: "collection" as const, href: `${base}/collection` },
+  { key: "specialities" as const, href: `${base}/#categories` },
+  { key: "service" as const, href: `${base}/#service` },
+  { key: "house" as const, href: `${base}/#about` },
+  { key: "contact" as const, href: `${base}/#contact` },
+];
 ---
 
 <header data-header class="fixed inset-x-0 top-0 z-50 transition-all duration-500">
   <div class="mx-auto flex max-w-[1500px] items-center justify-between px-5 py-5 sm:px-8 lg:px-12">
     <!-- Wordmark -->
-    <a href="/" class="flex flex-col leading-none" aria-label={company.full}>
+    <a href={homeHref} class="flex flex-col leading-none" aria-label={company.full}>
       <span class="font-display text-2xl tracking-[0.22em] text-cream sm:text-[1.7rem]">HOLLMANN</span>
       <span class="mt-0.5 text-[0.58rem] tracking-[0.52em] text-gold">INTERNATIONAL</span>
     </a>
@@ -13,35 +28,42 @@ import { nav, company, currencies } from "../data/site";
     <!-- Desktop nav -->
     <nav class="hidden items-center gap-8 lg:flex">
       {
-        nav.map((item) => (
-          <a
-            href={item.href}
-            class="text-[0.78rem] tracking-[0.16em] text-cream/85 uppercase transition-colors duration-300 hover:text-gold-bright"
-          >
-            {item.label}
+        navItems.map((item) => (
+          <a href={item.href} class="text-[0.78rem] tracking-[0.16em] text-cream/85 uppercase transition-colors duration-300 hover:text-gold-bright">
+            {t.nav[item.key]}
           </a>
         ))
       }
     </nav>
 
-    <div class="flex items-center gap-4 sm:gap-5">
+    <div class="flex items-center gap-3 sm:gap-4">
+      <!-- Language -->
+      <div class="relative hidden sm:block">
+        <button data-lang-toggle class="flex items-center gap-1.5 text-[0.74rem] tracking-[0.12em] text-cream/85 uppercase transition-colors hover:text-gold-bright" aria-label={t.a11y.changeLanguage}>
+          {languages[lang].native}
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+        </button>
+        <div data-lang-menu class="absolute end-0 top-full z-50 mt-3 hidden min-w-[150px] border border-white/10 bg-ink-900/95 py-2 backdrop-blur-xl">
+          {
+            localeList.map((code) => (
+              <a href={localizePath(pathname, code)} class:list={["block px-4 py-2 text-sm transition-colors hover:text-gold-bright", code === lang ? "text-gold" : "text-fog"]}>
+                {languages[code].label}
+              </a>
+            ))
+          }
+        </div>
+      </div>
+
       <!-- Currency -->
       <div class="relative hidden sm:block">
-        <button
-          data-currency-toggle
-          class="flex items-center gap-1.5 text-[0.74rem] tracking-[0.12em] text-cream/85 transition-colors hover:text-gold-bright"
-          aria-label="Change currency"
-        >
+        <button data-currency-toggle class="flex items-center gap-1.5 text-[0.74rem] tracking-[0.12em] text-cream/85 transition-colors hover:text-gold-bright" aria-label={t.a11y.changeCurrency}>
           <span data-cur-code>EUR</span>
           <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
         </button>
-        <div data-currency-menu class="absolute right-0 top-full z-50 mt-3 hidden min-w-[130px] border border-white/10 bg-ink-900/95 py-2 backdrop-blur-xl">
+        <div data-currency-menu class="absolute end-0 top-full z-50 mt-3 hidden min-w-[130px] border border-white/10 bg-ink-900/95 py-2 backdrop-blur-xl">
           {
             currencies.map((c) => (
-              <button
-                data-currency-set={c.code}
-                class="flex w-full items-center justify-between px-4 py-2 text-left text-sm text-fog transition-colors hover:text-gold-bright"
-              >
+              <button data-currency-set={c.code} class="flex w-full items-center justify-between px-4 py-2 text-start text-sm text-fog transition-colors hover:text-gold-bright">
                 <span>{c.code}</span>
                 <span class="text-fog">{c.symbol.trim()}</span>
               </button>
@@ -51,17 +73,17 @@ import { nav, company, currencies } from "../data/site";
       </div>
 
       <!-- Shortlist -->
-      <button data-open-shortlist class="relative text-cream transition-colors hover:text-gold-bright" aria-label="Open shortlist">
+      <button data-open-shortlist class="relative text-cream transition-colors hover:text-gold-bright" aria-label={t.a11y.openShortlist}>
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4">
           <path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"/>
         </svg>
-        <span data-fav-count class="absolute -right-2 -top-2 flex h-4 min-w-4 items-center justify-center rounded-full bg-gold px-1 text-[0.6rem] font-medium text-ink opacity-0 transition-opacity">0</span>
+        <span data-fav-count class="absolute -end-2 -top-2 flex h-4 min-w-4 items-center justify-center rounded-full bg-gold px-1 text-[0.6rem] font-medium text-ink opacity-0 transition-opacity">0</span>
       </button>
 
-      <button data-enquire="" data-magnetic class="hidden btn btn-gold !px-6 !py-3 sm:inline-flex">Enquire</button>
+      <button data-enquire="" data-magnetic class="hidden btn btn-gold !px-6 !py-3 sm:inline-flex">{t.cta.enquire}</button>
 
       <!-- Mobile toggle -->
-      <button data-menu-toggle class="flex h-10 w-10 items-center justify-center text-cream lg:hidden" aria-label="Open menu" aria-expanded="false">
+      <button data-menu-toggle class="flex h-10 w-10 items-center justify-center text-cream lg:hidden" aria-label={t.a11y.menu} aria-expanded="false">
         <span class="relative block h-3 w-6">
           <span class="absolute left-0 top-0 h-px w-full bg-current"></span>
           <span class="absolute left-0 bottom-0 h-px w-full bg-current"></span>
@@ -76,19 +98,22 @@ import { nav, company, currencies } from "../data/site";
   <div class="flex h-full flex-col justify-center px-8">
     <nav class="flex flex-col gap-6">
       {
-        nav.map((item) => (
+        navItems.map((item) => (
           <a href={item.href} data-menu-link class="font-display text-4xl text-cream transition-colors duration-300 hover:text-gold">
-            {item.label}
+            {t.nav[item.key]}
           </a>
         ))
       }
     </nav>
     <div class="mt-12 hairline"></div>
-    <div class="mt-8 flex items-center gap-6">
-      <button data-open-shortlist data-menu-link class="text-[0.74rem] tracking-[0.18em] text-gold uppercase">Shortlist (<span data-fav-count>0</span>)</button>
-      <div class="flex gap-3">
-        {currencies.map((c) => (<button data-currency-set={c.code} class="text-[0.74rem] text-fog">{c.code}</button>))}
-      </div>
+    <div class="mt-8 flex flex-wrap items-center gap-x-5 gap-y-3">
+      <button data-open-shortlist data-menu-link class="text-[0.74rem] tracking-[0.18em] text-gold uppercase">{t.shortlist.title} (<span data-fav-count>0</span>)</button>
+    </div>
+    <div class="mt-5 flex flex-wrap gap-x-4 gap-y-2">
+      {localeList.map((code) => (<a href={localizePath(pathname, code)} class:list={["text-[0.78rem]", code === lang ? "text-gold" : "text-fog"]}>{languages[code].label}</a>))}
+    </div>
+    <div class="mt-3 flex flex-wrap gap-x-4 gap-y-2">
+      {currencies.map((c) => (<button data-currency-set={c.code} class="text-[0.74rem] text-fog">{c.code}</button>))}
     </div>
     <a href={`tel:${company.phoneHref}`} class="mt-8 text-lg text-gold-bright">{company.phone}</a>
     <a href={`mailto:${company.email}`} class="mt-1 text-mist">{company.email}</a>
@@ -96,7 +121,6 @@ import { nav, company, currencies } from "../data/site";
 </div>
 
 <style>
-  /* Dark scrim behind the transparent header so nav stays legible over the bright hero */
   header::before {
     content: "";
     position: absolute;

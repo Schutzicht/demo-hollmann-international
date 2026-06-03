@@ -1,6 +1,11 @@
 ---
 import { company, social, categories } from "../data/site";
+import { getLang, getDict } from "../i18n";
+
+const lang = getLang(Astro);
+const t = getDict(lang);
 const interests = categories.filter((c) => c.slug !== "all");
+const inputCls = "mt-2 w-full border border-white/12 bg-ink-850 px-4 py-3.5 text-cream outline-none transition-colors duration-300 placeholder:text-fog focus:border-gold";
 ---
 
 <section id="contact" class="bg-ink py-24 sm:py-32">
@@ -10,76 +15,41 @@ const interests = categories.filter((c) => c.slug !== "all");
       <div>
         <p class="eyebrow flex items-center gap-3" data-reveal>
           <span class="inline-block h-px w-8 bg-gold"></span>
-          Contact
+          {t.contact.eyebrow}
         </p>
-        <h2 class="display-lg mt-5 text-cream" data-reveal style="--reveal-delay:100ms">
-          Tell us what you<br />are looking for.
-        </h2>
-        <p class="mt-6 max-w-md text-mist" data-reveal style="--reveal-delay:160ms">
-          Whether it is a car from our collection or a specific commission, we
-          reply personally, in your language.
-        </p>
+        <h2 class="display-lg mt-5 text-cream" data-reveal style="--reveal-delay:100ms">{t.contact.title}</h2>
+        <p class="mt-6 max-w-md text-mist" data-reveal style="--reveal-delay:160ms">{t.contact.sub}</p>
 
         <form data-form class="mt-10 space-y-5" data-reveal style="--reveal-delay:220ms">
           <div class="grid gap-5 sm:grid-cols-2">
             <label class="block">
-              <span class="text-[0.68rem] tracking-[0.16em] text-fog uppercase">Name</span>
-              <input
-                required
-                type="text"
-                name="name"
-                class="mt-2 w-full border border-white/12 bg-ink-850 px-4 py-3.5 text-cream outline-none transition-colors duration-300 placeholder:text-fog focus:border-gold"
-                placeholder="Your name"
-              />
+              <span class="text-[0.68rem] tracking-[0.16em] text-fog uppercase">{t.contact.name}</span>
+              <input required type="text" name="name" class={inputCls} placeholder={t.contact.namePh} />
             </label>
             <label class="block">
-              <span class="text-[0.68rem] tracking-[0.16em] text-fog uppercase">Email</span>
-              <input
-                required
-                type="email"
-                name="email"
-                class="mt-2 w-full border border-white/12 bg-ink-850 px-4 py-3.5 text-cream outline-none transition-colors duration-300 placeholder:text-fog focus:border-gold"
-                placeholder="you@example.com"
-              />
+              <span class="text-[0.68rem] tracking-[0.16em] text-fog uppercase">{t.contact.email}</span>
+              <input required type="email" name="email" class={inputCls} placeholder={t.contact.emailPh} />
             </label>
           </div>
           <div class="grid gap-5 sm:grid-cols-2">
             <label class="block">
-              <span class="text-[0.68rem] tracking-[0.16em] text-fog uppercase">Phone</span>
-              <input
-                type="tel"
-                name="phone"
-                class="mt-2 w-full border border-white/12 bg-ink-850 px-4 py-3.5 text-cream outline-none transition-colors duration-300 placeholder:text-fog focus:border-gold"
-                placeholder="+ ..."
-              />
+              <span class="text-[0.68rem] tracking-[0.16em] text-fog uppercase">{t.contact.phone}</span>
+              <input type="tel" name="phone" class={inputCls} placeholder={t.contact.phonePh} />
             </label>
             <label class="block">
-              <span class="text-[0.68rem] tracking-[0.16em] text-fog uppercase">Interest</span>
-              <select
-                name="interest"
-                class="mt-2 w-full border border-white/12 bg-ink-850 px-4 py-3.5 text-cream outline-none transition-colors duration-300 focus:border-gold"
-              >
-                {interests.map((c) => <option value={c.slug}>{c.label}</option>)}
-                <option value="sourcing">Sourcing request</option>
+              <span class="text-[0.68rem] tracking-[0.16em] text-fog uppercase">{t.contact.interest}</span>
+              <select name="interest" class={inputCls + " !py-3.5"}>
+                {interests.map((c) => <option value={c.slug}>{(t.catLabels as any)[c.slug]}</option>)}
+                <option value="sourcing">{t.sourcingOption}</option>
               </select>
             </label>
           </div>
           <label class="block">
-            <span class="text-[0.68rem] tracking-[0.16em] text-fog uppercase">Message</span>
-            <textarea
-              name="message"
-              rows="4"
-              class="mt-2 w-full resize-none border border-white/12 bg-ink-850 px-4 py-3.5 text-cream outline-none transition-colors duration-300 placeholder:text-fog focus:border-gold"
-              placeholder="The specification, budget or vehicle you have in mind"
-            ></textarea>
+            <span class="text-[0.68rem] tracking-[0.16em] text-fog uppercase">{t.contact.message}</span>
+            <textarea name="message" rows="4" class={inputCls + " resize-none"} placeholder={t.contact.messagePh}></textarea>
           </label>
-          <button type="submit" class="btn btn-gold w-full sm:w-auto">
-            Send enquiry
-          </button>
-          <p data-success class="hidden text-sm text-gold-bright">
-            Thank you. Your enquiry has been received, we will be in touch
-            shortly. (Demo form, no message is actually sent.)
-          </p>
+          <button type="submit" class="btn btn-gold w-full sm:w-auto">{t.cta.send}</button>
+          <p data-success class="hidden text-sm text-gold-bright">{t.contact.success}</p>
         </form>
       </div>
 
@@ -87,50 +57,32 @@ const interests = categories.filter((c) => c.slug !== "all");
       <div class="flex flex-col" data-reveal style="--reveal-delay:200ms">
         <div class="border border-white/8 bg-ink-850">
           <div class="aspect-[16/10] w-full overflow-hidden border-b border-white/8 grayscale">
-            <iframe
-              title="Map of Hollmann International, Stuhr"
-              src="https://www.openstreetmap.org/export/embed.html?bbox=8.74%2C53.02%2C8.84%2C53.08&layer=mapnik&marker=53.05%2C8.79"
-              class="h-full w-full opacity-80"
-              loading="lazy"
-            ></iframe>
+            <iframe title="Map" src="https://www.openstreetmap.org/export/embed.html?bbox=8.74%2C53.02%2C8.84%2C53.08&layer=mapnik&marker=53.05%2C8.79" class="h-full w-full opacity-80" loading="lazy"></iframe>
           </div>
           <div class="space-y-6 p-7">
             <div>
-              <div class="text-[0.68rem] tracking-[0.2em] text-fog uppercase">Showroom</div>
-              <p class="mt-2 text-cream">
-                {company.address.street}<br />
-                {company.address.postal} {company.address.city}, {company.address.country}
-              </p>
-              <p class="mt-2 text-sm text-gold-bright">{company.viewing}</p>
+              <div class="text-[0.68rem] tracking-[0.2em] text-fog uppercase">{t.contact.showroom}</div>
+              <p class="mt-2 text-cream">{company.address.street}<br />{company.address.postal} {company.address.city}, {company.address.country}</p>
+              <p class="mt-2 text-sm text-gold-bright">{t.contact.viewing}</p>
             </div>
             <div class="hairline"></div>
             <div class="grid grid-cols-2 gap-6">
               <div>
-                <div class="text-[0.68rem] tracking-[0.2em] text-fog uppercase">Call</div>
-                <a href={`tel:${company.phoneHref}`} class="mt-2 block text-cream transition-colors hover:text-gold-bright">
-                  {company.phone}
-                </a>
+                <div class="text-[0.68rem] tracking-[0.2em] text-fog uppercase">{t.cta.call}</div>
+                <a href={`tel:${company.phoneHref}`} class="mt-2 block text-cream transition-colors hover:text-gold-bright">{company.phone}</a>
               </div>
               <div>
-                <div class="text-[0.68rem] tracking-[0.2em] text-fog uppercase">Email</div>
-                <a href={`mailto:${company.email}`} class="mt-2 block break-all text-cream transition-colors hover:text-gold-bright">
-                  {company.email}
-                </a>
+                <div class="text-[0.68rem] tracking-[0.2em] text-fog uppercase">{t.contact.email}</div>
+                <a href={`mailto:${company.email}`} class="mt-2 block break-all text-cream transition-colors hover:text-gold-bright">{company.email}</a>
               </div>
               <div>
-                <div class="text-[0.68rem] tracking-[0.2em] text-fog uppercase">Hours</div>
+                <div class="text-[0.68rem] tracking-[0.2em] text-fog uppercase">{t.contact.hours}</div>
                 <p class="mt-2 text-cream">{company.hours}</p>
               </div>
               <div>
-                <div class="text-[0.68rem] tracking-[0.2em] text-fog uppercase">Follow</div>
+                <div class="text-[0.68rem] tracking-[0.2em] text-fog uppercase">{t.contact.follow}</div>
                 <div class="mt-2 flex flex-wrap gap-x-4 gap-y-1">
-                  {
-                    social.map((s) => (
-                      <a href={s.href} target="_blank" rel="noopener" class="text-sm text-cream transition-colors hover:text-gold-bright">
-                        {s.label}
-                      </a>
-                    ))
-                  }
+                  {social.map((s) => <a href={s.href} target="_blank" rel="noopener" class="text-sm text-cream transition-colors hover:text-gold-bright">{s.label}</a>)}
                 </div>
               </div>
             </div>

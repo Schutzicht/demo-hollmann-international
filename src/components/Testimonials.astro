@@ -1,37 +1,24 @@
 ---
-import { testimonials } from "../data/site";
+import { getLang, getDict } from "../i18n";
+
+const lang = getLang(Astro);
+const t = getDict(lang);
 ---
 
 <section class="border-y border-white/5 bg-ink-900 py-24 sm:py-32">
   <div class="mx-auto max-w-4xl px-5 text-center sm:px-8">
-    <svg
-      class="mx-auto text-gold/40"
-      width="44"
-      height="44"
-      viewBox="0 0 24 24"
-      fill="currentColor"
-      data-reveal
-    >
+    <svg class="mx-auto text-gold/40" width="44" height="44" viewBox="0 0 24 24" fill="currentColor" data-reveal>
       <path d="M9 7H5a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2h2v2a2 2 0 0 1-2 2H4v2h1a4 4 0 0 0 4-4V7zm10 0h-4a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2h2v2a2 2 0 0 1-2 2h-1v2h1a4 4 0 0 0 4-4V7z" />
     </svg>
 
     <div class="relative mt-8 min-h-[200px] sm:min-h-[180px]">
       {
-        testimonials.map((t, i) => (
-          <figure
-            data-quote
-            class:list={[
-              "absolute inset-0 flex flex-col items-center transition-opacity duration-700",
-              i === 0 ? "opacity-100" : "opacity-0",
-            ]}
-            style="transition-timing-function: var(--ease-lux)"
-          >
-            <blockquote class="font-display text-2xl leading-snug text-cream sm:text-3xl">
-              {t.quote}
-            </blockquote>
+        t.testimonials.map((tm: { quote: string; author: string; location: string }, i: number) => (
+          <figure data-quote class:list={["absolute inset-0 flex flex-col items-center transition-opacity duration-700", i === 0 ? "opacity-100" : "opacity-0"]} style="transition-timing-function: var(--ease-lux)">
+            <blockquote class="font-display text-2xl leading-snug text-cream sm:text-3xl">{tm.quote}</blockquote>
             <figcaption class="mt-7 text-[0.72rem] tracking-[0.2em] text-gold uppercase">
-              {t.author}
-              <span class="text-fog"> · {t.location}</span>
+              {tm.author}
+              <span class="text-fog"> · {tm.location}</span>
             </figcaption>
           </figure>
         ))
@@ -40,18 +27,10 @@ import { testimonials } from "../data/site";
 
     <div class="mt-8 flex justify-center gap-2">
       {
-        testimonials.map((_, i) => (
-          <button
-            data-quote-dot
-            class:list={[
-              "h-1.5 w-1.5 rounded-full transition-all duration-500",
-              i === 0 ? "w-6 bg-gold" : "bg-cream/25",
-            ]}
-            aria-label={`Quote ${i + 1}`}
-          />
+        t.testimonials.map((_: unknown, i: number) => (
+          <button data-quote-dot class:list={["h-1.5 w-1.5 rounded-full transition-all duration-500", i === 0 ? "w-6 bg-gold" : "bg-cream/25"]} aria-label={`Quote ${i + 1}`} />
         ))
       }
     </div>
   </div>
 </section>
-

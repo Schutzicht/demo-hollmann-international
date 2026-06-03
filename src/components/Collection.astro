@@ -1,32 +1,35 @@
 ---
 import { vehicles } from "../data/site";
 import VehicleCard from "./VehicleCard.astro";
+import { getLang, getDict } from "../i18n";
 
+const lang = getLang(Astro);
+const t = getDict(lang);
+const base = lang === "en" ? "" : `/${lang}`;
 const featured = vehicles.slice(0, 6);
+const viewAll = t.cta.viewAll.replace("{n}", String(vehicles.length));
 ---
 
 <section id="collection" class="bg-ink py-24 sm:py-32">
   <div class="mx-auto max-w-[1500px] px-5 sm:px-8 lg:px-12">
-    <!-- Header -->
     <div class="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
       <div>
         <p class="eyebrow flex items-center gap-3" data-reveal>
           <span class="inline-block h-px w-8 bg-gold"></span>
-          The collection
+          {t.collectionSec.eyebrow}
         </p>
         <h2 class="display-lg mt-5 max-w-2xl text-cream" data-reveal style="--reveal-delay:100ms">
-          A curated selection, ready to travel.
+          {t.collectionSec.title}
         </h2>
       </div>
-      <a href="/collection" class="group flex items-center gap-3 text-[0.74rem] tracking-[0.18em] text-gold-bright uppercase" data-reveal style="--reveal-delay:200ms">
-        View all {vehicles.length} vehicles
+      <a href={`${base}/collection`} class="group flex items-center gap-3 text-[0.74rem] tracking-[0.18em] text-gold-bright uppercase" data-reveal style="--reveal-delay:200ms">
+        {viewAll}
         <span class="flex h-9 w-9 items-center justify-center border border-gold/40 transition-all duration-500 group-hover:bg-gold group-hover:text-ink">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
         </span>
       </a>
     </div>
 
-    <!-- Featured grid -->
     <div data-grid class="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
       {featured.map((v, i) => <VehicleCard vehicle={v} index={i} />)}
     </div>

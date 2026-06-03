@@ -1,0 +1,18 @@
+---
+import VehicleDetailView from "../../../components/views/VehicleDetailView.astro";
+import { vehicles, vehicleSlug } from "../../../data/site";
+
+export function getStaticPaths() {
+  const langs = ["de", "zh", "ar"];
+  return langs.flatMap((lang) =>
+    vehicles.map((v) => ({
+      params: { lang, slug: vehicleSlug(v) },
+      props: { vehicle: v },
+    }))
+  );
+}
+
+const { vehicle } = Astro.props;
+---
+
+<VehicleDetailView vehicle={vehicle} />

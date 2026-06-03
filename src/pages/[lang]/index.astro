@@ -1,0 +1,9 @@
+---
+import HomeView from "../../components/views/HomeView.astro";
+
+export function getStaticPaths() {
+  return [{ params: { lang: "de" } }, { params: { lang: "zh" } }, { params: { lang: "ar" } }];
+}
+---
+
+<HomeView />

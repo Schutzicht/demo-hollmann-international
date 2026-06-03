@@ -1,0 +1,84 @@
+---
+import Base from "../../layouts/Base.astro";
+import Header from "../Header.astro";
+import Footer from "../Footer.astro";
+import VehicleCard from "../VehicleCard.astro";
+import { vehicles, categories, company } from "../../data/site";
+import { getLang, getDict } from "../../i18n";
+
+const lang = getLang(Astro);
+const t = getDict(lang);
+const brands = Array.from(new Set(vehicles.map((v) => v.brand))).sort();
+const priceTiers = [
+  { value: "0", label: t.collectionPage.anyPrice },
+  { value: "250000", label: t.collectionPage.upTo.replace("{amt}", "€250k") },
+  { value: "500000", label: t.collectionPage.upTo.replace("{amt}", "€500k") },
+  { value: "1000000", label: t.collectionPage.upTo.replace("{amt}", "€1M") },
+  { value: "2000000", label: t.collectionPage.upTo.replace("{amt}", "€2M") },
+];
+const selectClass = "w-full border border-white/12 bg-ink-850 px-4 py-3 text-sm text-cream outline-none transition-colors duration-300 focus:border-gold";
+---
+
+<Base title={`${t.nav.collection} · ${company.full}`}>
+  <Header />
+  <main class="bg-ink pt-28 sm:pt-32">
+    <div class="mx-auto max-w-[1500px] px-5 sm:px-8 lg:px-12">
+      <div class="border-b border-white/8 pb-10">
+        <p class="eyebrow flex items-center gap-3" data-reveal>
+          <span class="inline-block h-px w-8 bg-gold"></span>
+          {t.collectionPage.eyebrow}
+        </p>
+        <div class="mt-5 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+          <h1 class="display-lg text-cream" data-reveal style="--reveal-delay:100ms">{t.collectionPage.title}</h1>
+          <p class="text-mist" data-reveal style="--reveal-delay:160ms">
+            {t.collectionPage.showing} <span data-result-count class="text-gold-bright">{vehicles.length}</span> {t.collectionPage.of} {vehicles.length} {t.collectionPage.vehicles}
+          </p>
+        </div>
+      </div>
+
+      <div class="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-4" data-reveal>
+        <label class="relative block">
+          <svg class="pointer-events-none absolute start-4 top-1/2 -translate-y-1/2 text-fog" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+          <input data-search type="search" placeholder={t.collectionPage.searchPh} class={selectClass + " ps-11"} />
+        </label>
+        <select data-brand class={selectClass} aria-label="brand">
+          <option value="all">{t.collectionPage.allMarques}</option>
+          {brands.map((b) => <option value={b}>{b}</option>)}
+        </select>
+        <select data-pricemax class={selectClass} aria-label="price">
+          {priceTiers.map((tier) => <option value={tier.value}>{tier.label}</option>)}
+        </select>
+        <select data-sort class={selectClass} aria-label="sort">
+          <option value="default">{t.collectionPage.sortFeatured}</option>
+          <option value="price-asc">{t.collectionPage.sortPriceAsc}</option>
+          <option value="price-desc">{t.collectionPage.sortPriceDesc}</option>
+          <option value="power-desc">{t.collectionPage.sortPowerDesc}</option>
+        </select>
+      </div>
+
+      <div class="mt-4 flex flex-wrap gap-2" data-reveal>
+        {
+          categories.map((c, i) => (
+            <button data-filter={c.slug} class:list={["border px-5 py-2.5 text-[0.7rem] tracking-[0.16em] uppercase transition-all duration-300", i === 0 ? "border-gold bg-gold text-ink" : "border-white/12 text-mist hover:border-gold/50 hover:text-gold-bright"]}>
+              {(t.catLabels as any)[c.slug]}
+            </button>
+          ))
+        }
+      </div>
+
+      <div data-grid class="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {vehicles.map((v, i) => <VehicleCard vehicle={v} index={i} />)}
+      </div>
+
+      <p data-empty class="mt-16 hidden text-center text-mist">{t.collectionPage.empty}</p>
+
+      <div class="mt-16 border-t border-white/8 py-12 text-center">
+        <p class="text-mist">{t.collectionPage.cantFind}</p>
+        <h2 class="display-md mt-3 text-cream">{t.collectionPage.sourceTitle}</h2>
+        <button data-enquire="" class="btn btn-gold mt-7">{t.collectionPage.sourceBtn}</button>
+      </div>
+    </div>
+    <div class="h-12"></div>
+  </main>
+  <Footer />
+</Base>

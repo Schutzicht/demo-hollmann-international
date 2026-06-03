@@ -43,6 +43,18 @@ const CURRENCIES = parseJSON<Currency[]>("currency-data", [
 ]);
 const carById = (id: string) => CARS.find((c) => c.id === id);
 
+// Localized strings for dynamically rendered UI (toasts, compare, shortlist)
+const S = parseJSON<any>("i18n-data", {
+  toast: { added: "Added to your shortlist", compareMax: "Compare up to three cars", selectTwo: "Select at least two cars to compare" },
+  remove: "Remove",
+  general: "General enquiry",
+  cmpLabels: { year: "Year", power: "Power", accel: "0–100 km/h", topSpeed: "Top speed", engine: "Engine", drivetrain: "Drivetrain", transmission: "Transmission", mileage: "Mileage" },
+  drivetrain: {},
+  values: {},
+});
+const tDrive = (v: string) => (S.drivetrain && S.drivetrain[v]) || v;
+const tVal = (v: string) => (S.values && S.values[v]) || v;
+
 // ----------------------------------------------------------------------------
 // Tiny store (localStorage + custom event)
 // ----------------------------------------------------------------------------
@@ -151,7 +163,7 @@ function renderShortlist() {
           <a href="/vehicles/${car.slug}" class="font-display text-lg leading-tight text-cream">${car.model}</a>
           <div class="mt-auto flex items-center justify-between">
             <span class="text-gold-bright" data-price="${car.priceNet}">${fmtMoney(car.priceNet)}</span>
-            <button data-fav="${car.id}" class="text-[0.62rem] tracking-[0.14em] text-fog uppercase transition-colors hover:text-gold-bright">Remove</button>
+            <button data-fav="${car.id}" class="text-[0.62rem] tracking-[0.14em] text-fog uppercase transition-colors hover:text-gold-bright">${S.remove}</button>
           </div>
         </div>
       </div>`;
@@ -208,7 +220,7 @@ function openCompare() {
   const body = document.querySelector<HTMLElement>("[data-compare-body]");
   if (!modal || !body) return;
   if (cars.length < 2) {
-    toast("Select at least two cars to compare");
+    toast(S.toast.selectTwo);
     return;
   }
   body.innerHTML = `
@@ -226,14 +238,14 @@ function openCompare() {
     </div>
     <table class="mt-8 w-full border-collapse">
       <tbody>
-        ${specRow("Year", cars.map((c) => String(c.year)))}
-        ${specRow("Power", cars.map((c) => c.power))}
-        ${specRow("0 to 100", cars.map((c) => c.accel))}
-        ${specRow("Top speed", cars.map((c) => c.topSpeed))}
-        ${specRow("Engine", cars.map((c) => c.engine))}
-        ${specRow("Drivetrain", cars.map((c) => c.drivetrain))}
-        ${specRow("Transmission", cars.map((c) => c.transmission))}
-        ${specRow("Mileage", cars.map((c) => c.mileage))}
+        ${specRow(S.cmpLabels.year, cars.map((c) => String(c.year)))}
+        ${specRow(S.cmpLabels.power, cars.map((c) => c.power))}
+        ${specRow(S.cmpLabels.accel, cars.map((c) => c.accel))}
+        ${specRow(S.cmpLabels.topSpeed, cars.map((c) => c.topSpeed))}
+        ${specRow(S.cmpLabels.engine, cars.map((c) => c.engine))}
+        ${specRow(S.cmpLabels.drivetrain, cars.map((c) => tDrive(c.drivetrain)))}
+        ${specRow(S.cmpLabels.transmission, cars.map((c) => c.transmission))}
+        ${specRow(S.cmpLabels.mileage, cars.map((c) => tVal(c.mileage)))}
       </tbody>
     </table>`;
   modal.classList.remove("pointer-events-none", "opacity-0");
@@ -268,7 +280,7 @@ function openEnquiry(id?: string) {
     if (subject) subject.value = car.title;
   } else if (ctx) {
     ctx.classList.add("hidden");
-    if (subject) subject.value = "General enquiry";
+    if (subject) subject.value = S.general;
   }
   if (wa) {
     const msg = car
@@ -632,7 +644,7 @@ function initPreloader() {
 }
 
 // ----------------------------------------------------------------------------
-// In-page anchor scrolling — handled in the CAPTURE phase so it runs before the
+// In-page anchor scrolling, handled in the CAPTURE phase so it runs before the
 // view-transition router and never lets it re-render the page or fight Lenis.
 // ----------------------------------------------------------------------------
 document.addEventListener(
@@ -646,8 +658,8 @@ document.addEventListener(
     const hash = href.slice(hashIdx);
     if (hash.length < 2) return;
     const path = href.slice(0, hashIdx);
-    const samePage =
-      path === "" || path === location.pathname || (path === "/" && location.pathname === "/");
+    const norm = (p: string) => p.replace(/\/+$/, "") || "/";
+    const samePage = path === "" || norm(path) === norm(location.pathname);
     if (!samePage) return;
     const el = document.querySelector(hash);
     if (!el) return;
@@ -675,7 +687,7 @@ document.addEventListener("click", (e) => {
       favs = favs.filter((f) => f !== id);
     } else {
       favs.push(id);
-      toast("Added to your shortlist");
+      toast(S.toast.added);
     }
     saveFav();
     syncStates();
@@ -691,7 +703,7 @@ document.addEventListener("click", (e) => {
       cmp = cmp.filter((c) => c !== id);
     } else {
       if (cmp.length >= 3) {
-        toast("Compare up to three cars");
+        toast(S.toast.compareMax);
         return;
       }
       cmp.push(id);
@@ -739,6 +751,11 @@ document.addEventListener("click", (e) => {
   }
   if (t.closest("[data-currency-toggle]")) {
     document.querySelector("[data-currency-menu]")?.classList.toggle("hidden");
+    document.querySelector("[data-lang-menu]")?.classList.add("hidden");
+  }
+  if (t.closest("[data-lang-toggle]")) {
+    document.querySelector("[data-lang-menu]")?.classList.toggle("hidden");
+    document.querySelector("[data-currency-menu]")?.classList.add("hidden");
   }
 
   // Lightbox open
@@ -789,6 +806,7 @@ document.addEventListener("keydown", (e) => {
     closeEnquiry();
     closeDrawer();
     document.querySelector("[data-currency-menu]")?.classList.add("hidden");
+    document.querySelector("[data-lang-menu]")?.classList.add("hidden");
   }
 });
 

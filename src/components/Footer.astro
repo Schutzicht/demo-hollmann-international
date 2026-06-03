@@ -1,54 +1,59 @@
 ---
-import { company, nav, social } from "../data/site";
+import { company, social } from "../data/site";
+import { getLang, getDict } from "../i18n";
+
+const lang = getLang(Astro);
+const t = getDict(lang);
+const base = lang === "en" ? "" : `/${lang}`;
+
+const navItems = [
+  { key: "collection" as const, href: `${base}/collection` },
+  { key: "specialities" as const, href: `${base}/#categories` },
+  { key: "service" as const, href: `${base}/#service` },
+  { key: "house" as const, href: `${base}/#about` },
+  { key: "contact" as const, href: `${base}/#contact` },
+];
+const copyright = t.footer.copyright.replace("{legal}", company.legal);
+const collabParts = t.footer.collab.split("{partner}");
 ---
 
 <footer class="border-t border-white/8 bg-ink-900">
-  <!-- CTA strip -->
   <div class="mx-auto max-w-[1500px] px-5 py-16 sm:px-8 sm:py-20 lg:px-12">
     <div class="flex flex-col items-start justify-between gap-8 lg:flex-row lg:items-center">
       <h2 class="display-md max-w-xl text-cream" data-reveal>
-        Looking for something specific?<br />
-        <span class="gold-text">We will source it.</span>
+        {t.footer.ctaT1}<br />
+        <span class="gold-text">{t.footer.ctaEm}</span>
       </h2>
       <div class="flex flex-wrap gap-4" data-reveal style="--reveal-delay:120ms">
         <a href={`tel:${company.phoneHref}`} class="btn btn-ghost">{company.phone}</a>
-        <a href="/#contact" class="btn btn-gold">Start an enquiry</a>
+        <a href={`${base}/#contact`} class="btn btn-gold">{t.cta.startEnquiry}</a>
       </div>
     </div>
   </div>
 
   <div class="hairline mx-auto max-w-[1500px]"></div>
 
-  <!-- Columns -->
   <div class="mx-auto grid max-w-[1500px] gap-10 px-5 py-16 sm:px-8 md:grid-cols-[1.5fr_1fr_1fr] lg:px-12">
     <div>
       <div class="flex flex-col leading-none">
         <span class="font-display text-2xl tracking-[0.22em] text-cream">HOLLMANN</span>
         <span class="mt-0.5 text-[0.58rem] tracking-[0.52em] text-gold">INTERNATIONAL</span>
       </div>
-      <p class="mt-5 max-w-xs text-sm leading-relaxed text-mist">{company.intro}</p>
-      <a href={company.partner.url} class="mt-5 inline-block text-[0.7rem] tracking-[0.18em] text-fog uppercase transition-colors hover:text-gold">
-        In collaboration with {company.partner.name}
-      </a>
+      <p class="mt-5 max-w-xs text-sm leading-relaxed text-mist">{t.footer.intro}</p>
+      <p class="mt-5 text-[0.7rem] tracking-[0.18em] text-fog uppercase">
+        {collabParts[0]}<a href={company.partner.url} class="transition-colors hover:text-gold">{company.partner.name}</a>{collabParts[1]}
+      </p>
     </div>
 
     <div>
-      <div class="text-[0.68rem] tracking-[0.2em] text-fog uppercase">Explore</div>
+      <div class="text-[0.68rem] tracking-[0.2em] text-fog uppercase">{t.footer.explore}</div>
       <ul class="mt-4 space-y-2.5">
-        {
-          nav.map((n) => (
-            <li>
-              <a href={n.href} class="text-mist transition-colors duration-300 hover:text-gold-bright">
-                {n.label}
-              </a>
-            </li>
-          ))
-        }
+        {navItems.map((n) => <li><a href={n.href} class="text-mist transition-colors duration-300 hover:text-gold-bright">{t.nav[n.key]}</a></li>)}
       </ul>
     </div>
 
     <div>
-      <div class="text-[0.68rem] tracking-[0.2em] text-fog uppercase">Reach us</div>
+      <div class="text-[0.68rem] tracking-[0.2em] text-fog uppercase">{t.footer.reachUs}</div>
       <ul class="mt-4 space-y-2.5 text-mist">
         <li>{company.address.street}</li>
         <li>{company.address.postal} {company.address.city}, {company.address.country}</li>
@@ -56,34 +61,19 @@ import { company, nav, social } from "../data/site";
         <li><a href={`mailto:${company.email}`} class="transition-colors hover:text-gold-bright">{company.email}</a></li>
       </ul>
       <div class="mt-5 flex flex-wrap gap-x-4 gap-y-1">
-        {
-          social.map((s) => (
-            <a href={s.href} target="_blank" rel="noopener" class="text-sm text-fog transition-colors hover:text-gold-bright">
-              {s.label}
-            </a>
-          ))
-        }
+        {social.map((s) => <a href={s.href} target="_blank" rel="noopener" class="text-sm text-fog transition-colors hover:text-gold-bright">{s.label}</a>)}
       </div>
     </div>
   </div>
 
-  <!-- Legal -->
   <div class="border-t border-white/8">
     <div class="mx-auto max-w-[1500px] px-5 py-7 sm:px-8 lg:px-12">
-      <p class="text-[0.68rem] leading-relaxed text-fog">
-        ¹ Fuel and energy consumption and CO₂ figures are indicative, determined
-        according to the WLTP procedure, and may vary. Images are for
-        illustration purposes only. Viewings by prior arrangement only. Pricing
-        shown as net export and, where applicable, gross including VAT.
-      </p>
+      <p class="text-[0.68rem] leading-relaxed text-fog">{t.footer.legal}</p>
       <div class="mt-5 flex flex-col items-start justify-between gap-3 sm:flex-row sm:items-center">
+        <p class="text-[0.72rem] text-fog">{copyright}</p>
         <p class="text-[0.72rem] text-fog">
-          © 2026 {company.legal}. Privacy policy · Imprint.
-        </p>
-        <p class="text-[0.72rem] text-fog">
-          Design concept by
-          <a href="https://agensea.nl" target="_blank" rel="noopener" class="text-gold transition-colors hover:text-gold-bright">
-            Agensea</a>. Not the official Hollmann website.
+          {t.footer.designBy}
+          <a href="https://agensea.nl" target="_blank" rel="noopener" class="text-gold transition-colors hover:text-gold-bright"> Agensea</a>. {t.footer.notOfficial}
         </p>
       </div>
     </div>

@@ -1,5 +1,9 @@
 ---
 import { stats } from "../data/site";
+import { getLang, getDict } from "../i18n";
+
+const lang = getLang(Astro);
+const t = getDict(lang);
 ---
 
 <section class="border-b border-white/5 bg-ink py-16 sm:py-20">
@@ -9,25 +13,19 @@ import { stats } from "../data/site";
         const isYear = s.value > 1000;
         return (
           <div
-            class:list={[
-              "flex flex-col px-2 lg:px-8",
-              i !== 0 && "lg:border-l lg:border-white/8",
-            ]}
+            class:list={["flex flex-col px-2 lg:px-8", i !== 0 && "lg:border-s lg:border-white/8"]}
             data-reveal
             style={`--reveal-delay:${i * 90}ms`}
           >
             <div class="font-display text-5xl text-cream sm:text-6xl">
-              {s.prefix}
               {isYear ? (
-                <span>{s.value}</span>
+                <span>{t.since}{s.value}</span>
               ) : (
                 <span data-count={s.value}>0</span>
               )}
               <span class="text-gold">{s.suffix}</span>
             </div>
-            <div class="mt-3 text-[0.72rem] tracking-[0.22em] text-fog uppercase">
-              {s.label}
-            </div>
+            <div class="mt-3 text-[0.72rem] tracking-[0.22em] text-fog uppercase">{t.statLabels[i]}</div>
           </div>
         );
       })

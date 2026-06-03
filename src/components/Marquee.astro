@@ -1,17 +1,26 @@
 ---
 import { marques } from "../data/site";
-const list = [...marques, ...marques];
+
+const logos = marques.map((m) => ({
+  name: m,
+  src: `/brands/${m.toLowerCase().replace(/ /g, "-")}.svg`,
+}));
+const list = [...logos, ...logos];
 ---
 
-<div class="marquee relative overflow-hidden border-y border-gold/12 bg-ink-900 py-6">
-  <div class="marquee-track">
+<div class="marquee relative overflow-hidden border-y border-gold/12 bg-ink-900 py-9">
+  <div class="marquee-track items-center">
     {
-      list.map((m) => (
-        <span class="flex items-center">
-          <span class="font-display text-xl text-mist/70 px-7 tracking-wide whitespace-nowrap">
-            {m}
-          </span>
-          <span class="h-1 w-1 rotate-45 bg-gold/40" />
+      list.map((l) => (
+        <span class="flex shrink-0 items-center justify-center px-8 sm:px-10">
+          <img
+            src={l.src}
+            alt={l.name}
+            title={l.name}
+            class="h-9 w-auto max-w-[120px] opacity-55 transition-opacity duration-500 hover:opacity-100 sm:h-10"
+            loading="lazy"
+            decoding="async"
+          />
         </span>
       ))
     }

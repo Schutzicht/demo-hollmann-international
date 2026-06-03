@@ -9,14 +9,11 @@ const t = getDict(lang);
 <!-- ============ Compare bar ============ -->
 <div
   data-compare-bar
-  class="fixed bottom-5 left-1/2 z-[100] flex -translate-x-1/2 translate-y-[140%] items-center gap-4 border border-gold/30 bg-ink-850/95 px-5 py-3 backdrop-blur-xl transition-transform duration-500"
+  class="fixed bottom-4 left-3 right-3 z-[100] flex translate-y-[140%] items-center justify-between gap-3 border border-gold/30 bg-ink-850/95 px-4 py-3 backdrop-blur-xl transition-transform duration-500 sm:left-1/2 sm:right-auto sm:-translate-x-1/2 sm:justify-start sm:gap-4 sm:px-5"
   style="transition-timing-function: var(--ease-lux)"
 >
-  <span class="hidden text-[0.66rem] tracking-[0.18em] text-fog uppercase sm:block">
-    {t.compare.title} (<span data-compare-count>0</span>)
-  </span>
-  <div data-compare-thumbs class="flex gap-2"></div>
-  <button data-open-compare class="btn btn-gold !px-5 !py-2.5 !text-[0.7rem]">{t.cta.compare}</button>
+  <div data-compare-thumbs class="hidden gap-2 sm:flex"></div>
+  <button data-open-compare class="btn btn-gold !px-5 !py-2.5 !text-[0.7rem]">{t.cta.compare} (<span data-compare-count>0</span>)</button>
   <button data-clear-compare aria-label="Clear" class="text-fog transition-colors hover:text-cream">
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M18 6 6 18M6 6l12 12"/></svg>
   </button>

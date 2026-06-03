@@ -17,9 +17,9 @@ const t = getDict(lang);
             data-reveal
             style={`--reveal-delay:${i * 90}ms`}
           >
-            <div class="font-display text-5xl text-cream sm:text-6xl">
+            <div class="font-display text-4xl text-cream sm:text-5xl lg:text-6xl">
               {isYear ? (
-                <span>{t.since}{s.value}</span>
+                <span>{s.value}</span>
               ) : (
                 <span data-count={s.value}>0</span>
               )}

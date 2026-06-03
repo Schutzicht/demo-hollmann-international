@@ -224,31 +224,36 @@ function openCompare() {
     toast(S.toast.selectTwo);
     return;
   }
+  const minW = cars.length > 2 ? "min-width:480px" : "";
   body.innerHTML = `
-    <div class="grid gap-4" style="grid-template-columns: repeat(${cars.length}, minmax(0,1fr));">
-      ${cars
-        .map(
-          (c) => `<a href="/vehicles/${c.slug}" class="group block">
-            <div class="aspect-[3/2] overflow-hidden bg-ink-900"><img src="${c.image}" alt="${c.title}" class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"/></div>
-            <div class="mt-3 text-[0.62rem] tracking-[0.2em] text-gold uppercase">${c.brand}</div>
-            <div class="font-display text-xl text-cream">${c.model}</div>
-            <div class="mt-1 text-gold-bright" data-price="${c.priceNet}">${fmtMoney(c.priceNet)}</div>
-          </a>`
-        )
-        .join("")}
-    </div>
-    <table class="mt-8 w-full border-collapse">
-      <tbody>
-        ${specRow(S.cmpLabels.year, cars.map((c) => String(c.year)))}
-        ${specRow(S.cmpLabels.power, cars.map((c) => c.power))}
-        ${specRow(S.cmpLabels.accel, cars.map((c) => c.accel))}
-        ${specRow(S.cmpLabels.topSpeed, cars.map((c) => c.topSpeed))}
-        ${specRow(S.cmpLabels.engine, cars.map((c) => c.engine))}
-        ${specRow(S.cmpLabels.drivetrain, cars.map((c) => tDrive(c.drivetrain)))}
-        ${specRow(S.cmpLabels.transmission, cars.map((c) => c.transmission))}
-        ${specRow(S.cmpLabels.mileage, cars.map((c) => tVal(c.mileage)))}
-      </tbody>
-    </table>`;
+    <div style="overflow-x:auto">
+      <div style="${minW}">
+        <div class="grid gap-4" style="grid-template-columns: repeat(${cars.length}, minmax(0,1fr));">
+          ${cars
+            .map(
+              (c) => `<a href="/vehicles/${c.slug}" class="group block">
+                <div class="aspect-[3/2] overflow-hidden bg-ink-900"><img src="${c.image}" alt="${c.title}" class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"/></div>
+                <div class="mt-3 text-[0.62rem] tracking-[0.2em] text-gold uppercase">${c.brand}</div>
+                <div class="font-display text-xl text-cream">${c.model}</div>
+                <div class="mt-1 text-gold-bright" data-price="${c.priceNet}">${fmtMoney(c.priceNet)}</div>
+              </a>`
+            )
+            .join("")}
+        </div>
+        <table class="mt-8 w-full border-collapse">
+          <tbody>
+            ${specRow(S.cmpLabels.year, cars.map((c) => String(c.year)))}
+            ${specRow(S.cmpLabels.power, cars.map((c) => c.power))}
+            ${specRow(S.cmpLabels.accel, cars.map((c) => c.accel))}
+            ${specRow(S.cmpLabels.topSpeed, cars.map((c) => c.topSpeed))}
+            ${specRow(S.cmpLabels.engine, cars.map((c) => c.engine))}
+            ${specRow(S.cmpLabels.drivetrain, cars.map((c) => tDrive(c.drivetrain)))}
+            ${specRow(S.cmpLabels.transmission, cars.map((c) => c.transmission))}
+            ${specRow(S.cmpLabels.mileage, cars.map((c) => tVal(c.mileage)))}
+          </tbody>
+        </table>
+      </div>
+    </div>`;
   modal.classList.remove("pointer-events-none", "opacity-0");
   modal.querySelector("[data-modal-panel]")?.classList.remove("translate-y-6");
   document.body.style.overflow = "hidden";

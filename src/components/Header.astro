@@ -7,14 +7,21 @@ const t = getDict(lang);
 const base = lang === "en" ? "" : `/${lang}`;
 const homeHref = base || "/";
 const pathname = Astro.url.pathname;
+const cur = pathname.replace(/\/+$/, "") || "/";
 
-const navItems = [
-  { key: "collection" as const, href: `${base}/collection` },
-  { key: "specialities" as const, href: `${base}/#categories` },
-  { key: "service" as const, href: `${base}/#service` },
-  { key: "house" as const, href: `${base}/#about` },
-  { key: "contact" as const, href: `${base}/#contact` },
-];
+const navItems = (
+  [
+    { key: "collection", href: `${base}/collection` },
+    { key: "service", href: `${base}/service` },
+    { key: "house", href: `${base}/about` },
+    { key: "contact", href: `${base}/contact` },
+  ] as const
+).map((it) => ({
+  ...it,
+  active:
+    cur === it.href.replace(/\/+$/, "") ||
+    (it.key === "collection" && cur.includes("/vehicles")),
+}));
 ---
 
 <header data-header class="fixed inset-x-0 top-0 z-50 transition-all duration-500">
@@ -29,7 +36,10 @@ const navItems = [
     <nav class="hidden items-center gap-8 lg:flex">
       {
         navItems.map((item) => (
-          <a href={item.href} class="text-[0.78rem] tracking-[0.16em] text-cream/85 uppercase transition-colors duration-300 hover:text-gold-bright">
+          <a
+            href={item.href}
+            class:list={["text-[0.78rem] tracking-[0.16em] uppercase transition-colors duration-300 hover:text-gold-bright", item.active ? "text-gold" : "text-cream/85"]}
+          >
             {t.nav[item.key]}
           </a>
         ))
@@ -99,7 +109,7 @@ const navItems = [
     <nav class="flex flex-col gap-6">
       {
         navItems.map((item) => (
-          <a href={item.href} data-menu-link class="font-display text-4xl text-cream transition-colors duration-300 hover:text-gold">
+          <a href={item.href} data-menu-link class:list={["font-display text-4xl transition-colors duration-300 hover:text-gold", item.active ? "text-gold" : "text-cream"]}>
             {t.nav[item.key]}
           </a>
         ))

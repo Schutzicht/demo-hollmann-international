@@ -8,10 +8,9 @@ const base = lang === "en" ? "" : `/${lang}`;
 
 const navItems = [
   { key: "collection" as const, href: `${base}/collection` },
-  { key: "specialities" as const, href: `${base}/#categories` },
-  { key: "service" as const, href: `${base}/#service` },
-  { key: "house" as const, href: `${base}/#about` },
-  { key: "contact" as const, href: `${base}/#contact` },
+  { key: "service" as const, href: `${base}/service` },
+  { key: "house" as const, href: `${base}/about` },
+  { key: "contact" as const, href: `${base}/contact` },
 ];
 const copyright = t.footer.copyright.replace("{legal}", company.legal);
 const collabParts = t.footer.collab.split("{partner}");
@@ -26,7 +25,7 @@ const collabParts = t.footer.collab.split("{partner}");
       </h2>
       <div class="flex flex-wrap gap-4" data-reveal style="--reveal-delay:120ms">
         <a href={`tel:${company.phoneHref}`} class="btn btn-ghost">{company.phone}</a>
-        <a href={`${base}/#contact`} class="btn btn-gold">{t.cta.startEnquiry}</a>
+        <button data-enquire="" class="btn btn-gold">{t.cta.startEnquiry}</button>
       </div>
     </div>
   </div>

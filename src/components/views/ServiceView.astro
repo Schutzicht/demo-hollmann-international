@@ -1,0 +1,21 @@
+---
+import Base from "../../layouts/Base.astro";
+import Header from "../Header.astro";
+import Service from "../Service.astro";
+import Process from "../Process.astro";
+import Footer from "../Footer.astro";
+import { company } from "../../data/site";
+import { getLang, getDict } from "../../i18n";
+
+const lang = getLang(Astro);
+const t = getDict(lang);
+---
+
+<Base title={`${t.nav.service} · ${company.full}`} description={t.serviceSec.sub}>
+  <Header />
+  <main class="bg-ink pt-10 sm:pt-14">
+    <Service />
+    <Process />
+  </main>
+  <Footer />
+</Base>

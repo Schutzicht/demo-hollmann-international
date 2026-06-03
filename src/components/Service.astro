@@ -1,6 +1,10 @@
 ---
 import { getLang, getDict } from "../i18n";
 
+interface Props {
+  bare?: boolean;
+}
+const { bare = false } = Astro.props;
 const lang = getLang(Astro);
 const t = getDict(lang);
 
@@ -20,16 +24,22 @@ const icons: string[] = [
     <div class="grid gap-14 lg:grid-cols-[0.9fr_1.1fr] lg:gap-20">
       <!-- Intro -->
       <div class="lg:sticky lg:top-28 lg:self-start">
-        <p class="eyebrow flex items-center gap-3" data-reveal>
-          <span class="inline-block h-px w-8 bg-gold"></span>
-          {t.serviceSec.eyebrow}
-        </p>
-        <h2 class="display-lg mt-5 text-cream" data-reveal style="--reveal-delay:100ms">
-          {t.serviceSec.title}
-        </h2>
-        <p class="mt-6 max-w-md text-lg leading-relaxed text-mist" data-reveal style="--reveal-delay:200ms">
-          {t.serviceSec.sub}
-        </p>
+        {
+          !bare && (
+            <Fragment>
+              <p class="eyebrow flex items-center gap-3" data-reveal>
+                <span class="inline-block h-px w-8 bg-gold" />
+                {t.serviceSec.eyebrow}
+              </p>
+              <h2 class="display-lg mt-5 text-cream" data-reveal style="--reveal-delay:100ms">
+                {t.serviceSec.title}
+              </h2>
+              <p class="mt-6 max-w-md text-lg leading-relaxed text-mist" data-reveal style="--reveal-delay:200ms">
+                {t.serviceSec.sub}
+              </p>
+            </Fragment>
+          )
+        }
 
         <div class="mt-10 border border-white/8 bg-ink-850 p-7" data-reveal style="--reveal-delay:280ms">
           <h3 class="font-display text-2xl text-cream">{t.serviceSec.individTitle}</h3>

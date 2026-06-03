@@ -1,6 +1,7 @@
 ---
 import Base from "../../layouts/Base.astro";
 import Header from "../Header.astro";
+import PageHero from "../PageHero.astro";
 import About from "../About.astro";
 import Stats from "../Stats.astro";
 import Footer from "../Footer.astro";
@@ -13,8 +14,9 @@ const t = getDict(lang);
 
 <Base title={`${t.nav.house} · ${company.full}`} description={t.about.title}>
   <Header />
-  <main class="bg-ink-900 pt-10 sm:pt-14">
-    <About />
+  <main class="bg-ink-900">
+    <PageHero eyebrow={t.about.eyebrow} title={t.about.title} image="/gallery/12.jpeg" />
+    <About bare />
     <Stats />
   </main>
   <Footer />

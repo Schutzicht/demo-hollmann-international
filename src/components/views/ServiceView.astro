@@ -1,6 +1,7 @@
 ---
 import Base from "../../layouts/Base.astro";
 import Header from "../Header.astro";
+import PageHero from "../PageHero.astro";
 import Service from "../Service.astro";
 import Process from "../Process.astro";
 import Footer from "../Footer.astro";
@@ -13,8 +14,9 @@ const t = getDict(lang);
 
 <Base title={`${t.nav.service} · ${company.full}`} description={t.serviceSec.sub}>
   <Header />
-  <main class="bg-ink pt-10 sm:pt-14">
-    <Service />
+  <main class="bg-ink">
+    <PageHero eyebrow={t.serviceSec.eyebrow} title={t.serviceSec.title} subtitle={t.serviceSec.sub} image="/gallery/6.jpeg" />
+    <Service bare />
     <Process />
   </main>
   <Footer />

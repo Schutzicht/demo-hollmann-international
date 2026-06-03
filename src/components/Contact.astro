@@ -2,6 +2,10 @@
 import { company, social, categories } from "../data/site";
 import { getLang, getDict } from "../i18n";
 
+interface Props {
+  bare?: boolean;
+}
+const { bare = false } = Astro.props;
 const lang = getLang(Astro);
 const t = getDict(lang);
 const interests = categories.filter((c) => c.slug !== "all");
@@ -13,12 +17,18 @@ const inputCls = "mt-2 w-full border border-white/12 bg-ink-850 px-4 py-3.5 text
     <div class="grid gap-14 lg:grid-cols-[1.05fr_0.95fr] lg:gap-20">
       <!-- Form -->
       <div>
-        <p class="eyebrow flex items-center gap-3" data-reveal>
-          <span class="inline-block h-px w-8 bg-gold"></span>
-          {t.contact.eyebrow}
-        </p>
-        <h2 class="display-lg mt-5 text-cream" data-reveal style="--reveal-delay:100ms">{t.contact.title}</h2>
-        <p class="mt-6 max-w-md text-mist" data-reveal style="--reveal-delay:160ms">{t.contact.sub}</p>
+        {
+          !bare && (
+            <Fragment>
+              <p class="eyebrow flex items-center gap-3" data-reveal>
+                <span class="inline-block h-px w-8 bg-gold" />
+                {t.contact.eyebrow}
+              </p>
+              <h2 class="display-lg mt-5 text-cream" data-reveal style="--reveal-delay:100ms">{t.contact.title}</h2>
+              <p class="mt-6 max-w-md text-mist" data-reveal style="--reveal-delay:160ms">{t.contact.sub}</p>
+            </Fragment>
+          )
+        }
 
         <form data-form class="mt-10 space-y-5" data-reveal style="--reveal-delay:220ms">
           <div class="grid gap-5 sm:grid-cols-2">

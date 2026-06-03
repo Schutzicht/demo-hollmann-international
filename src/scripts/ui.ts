@@ -632,30 +632,39 @@ function initPreloader() {
 }
 
 // ----------------------------------------------------------------------------
+// In-page anchor scrolling — handled in the CAPTURE phase so it runs before the
+// view-transition router and never lets it re-render the page or fight Lenis.
+// ----------------------------------------------------------------------------
+document.addEventListener(
+  "click",
+  (e) => {
+    const a = (e.target as HTMLElement).closest<HTMLAnchorElement>("a[href]");
+    if (!a) return;
+    const href = a.getAttribute("href") || "";
+    const hashIdx = href.indexOf("#");
+    if (hashIdx === -1) return;
+    const hash = href.slice(hashIdx);
+    if (hash.length < 2) return;
+    const path = href.slice(0, hashIdx);
+    const samePage =
+      path === "" || path === location.pathname || (path === "/" && location.pathname === "/");
+    if (!samePage) return;
+    const el = document.querySelector(hash);
+    if (!el) return;
+    e.preventDefault();
+    e.stopPropagation();
+    const lenis = (window as any).__lenis;
+    if (lenis) lenis.scrollTo(el as HTMLElement, { offset: -20 });
+    else el.scrollIntoView({ behavior: "smooth" });
+  },
+  { capture: true }
+);
+
+// ----------------------------------------------------------------------------
 // Delegated click handling (survives navigation)
 // ----------------------------------------------------------------------------
 document.addEventListener("click", (e) => {
   const t = e.target as HTMLElement;
-
-  // Anchor smooth-scroll via Lenis (handles "#id" and "/#id" on the home page)
-  const anchor = t.closest<HTMLAnchorElement>("a[href]");
-  if (anchor) {
-    const href = anchor.getAttribute("href") || "";
-    const hashIdx = href.indexOf("#");
-    if (hashIdx !== -1) {
-      const hash = href.slice(hashIdx);
-      const path = href.slice(0, hashIdx);
-      const samePage =
-        path === "" || path === location.pathname || (path === "/" && location.pathname === "/");
-      const el = hash.length > 1 ? document.querySelector(hash) : null;
-      if (samePage && el) {
-        e.preventDefault();
-        const lenis = (window as any).__lenis;
-        if (lenis) lenis.scrollTo(el as HTMLElement, { offset: -20 });
-        else el.scrollIntoView({ behavior: "smooth" });
-      }
-    }
-  }
 
   // Favorite toggle
   const favBtn = t.closest<HTMLElement>("[data-fav]");

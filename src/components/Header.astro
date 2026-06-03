@@ -16,7 +16,7 @@ import { nav, company, currencies } from "../data/site";
         nav.map((item) => (
           <a
             href={item.href}
-            class="text-[0.78rem] tracking-[0.16em] text-mist uppercase transition-colors duration-300 hover:text-gold-bright"
+            class="text-[0.78rem] tracking-[0.16em] text-cream/85 uppercase transition-colors duration-300 hover:text-gold-bright"
           >
             {item.label}
           </a>
@@ -29,7 +29,7 @@ import { nav, company, currencies } from "../data/site";
       <div class="relative hidden sm:block">
         <button
           data-currency-toggle
-          class="flex items-center gap-1.5 text-[0.74rem] tracking-[0.12em] text-mist transition-colors hover:text-gold-bright"
+          class="flex items-center gap-1.5 text-[0.74rem] tracking-[0.12em] text-cream/85 transition-colors hover:text-gold-bright"
           aria-label="Change currency"
         >
           <span data-cur-code>EUR</span>
@@ -96,6 +96,19 @@ import { nav, company, currencies } from "../data/site";
 </div>
 
 <style>
+  /* Dark scrim behind the transparent header so nav stays legible over the bright hero */
+  header::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: linear-gradient(to bottom, rgba(10, 10, 12, 0.72), rgba(10, 10, 12, 0));
+    transition: opacity 0.5s var(--ease-lux);
+    pointer-events: none;
+  }
+  header.scrolled::before {
+    opacity: 0;
+  }
   header.scrolled {
     background-color: color-mix(in srgb, var(--color-ink-900) 88%, transparent);
     backdrop-filter: blur(14px);
